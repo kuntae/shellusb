@@ -79,6 +79,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bin.cpp" />
+    <ClCompile Include="FileControl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FileControl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
