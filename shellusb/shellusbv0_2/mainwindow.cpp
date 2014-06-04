@@ -26,7 +26,7 @@ void MainWindow::on_pushButton_clicked()
 
     password = ui->password->text();
 
-    QFile file("C:/Users/kuntae/Desktop/shellusbv0_2/password.txt.shellUSB");
+    QFile file("../shellusbv0_2/password.txt.shellUSB");
 
     if(!file.open(QFile::ReadOnly)) {
         qDebug() << "Could not open read file";
