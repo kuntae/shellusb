@@ -5,7 +5,6 @@
 #include <QtGui>
 #include <QtCore>
 #include <QDirModel>
-#include <QMainWindow>
 #include <QDir>
 #include <QFileSystemModel>
 #include <QString>

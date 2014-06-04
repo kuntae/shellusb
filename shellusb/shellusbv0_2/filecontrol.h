@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QInputDialog>
 #include <QDialog>
+#include <QMessageBox>
 
 #include "tinyaes.h"
 #include "progdialog.h"
