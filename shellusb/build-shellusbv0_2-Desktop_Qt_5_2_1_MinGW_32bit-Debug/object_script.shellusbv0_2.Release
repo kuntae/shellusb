@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\progdialog.o
+./release\shellusb.o
+./release\tinyaes.o
+./release\encryptthread.o
+./release\filecontrol.o
+./release\moc_mainwindow.o
+./release\moc_progdialog.o
+./release\moc_shellusb.o
+);

@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\progdialog.o
+./debug\shellusb.o
+./debug\tinyaes.o
+./debug\encryptthread.o
+./debug\filecontrol.o
+./debug\moc_mainwindow.o
+./debug\moc_progdialog.o
+./debug\moc_shellusb.o
+);
