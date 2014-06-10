@@ -15,8 +15,9 @@ public:
     explicit progdialog(QWidget *parent = 0);
     ~progdialog();
 
-private slots:
+public slots:
     void on_pushButton_clicked();
+    void onChangeNumber(int i);
 
 private:
     Ui::progdialog *ui;

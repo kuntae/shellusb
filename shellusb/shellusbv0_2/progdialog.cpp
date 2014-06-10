@@ -17,3 +17,7 @@ void progdialog::on_pushButton_clicked()
 {
 
 }
+
+void progdialog::onChangeNumber(int i) {
+    ui->progressBar->setValue(i);
+}

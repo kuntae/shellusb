@@ -3,19 +3,34 @@
 
 #include <QThread>
 #include <QString>
+#include <QtCore>
+#include <QProgressBar>
 
-#include "filecontrol.h"
+#include "tinyaes.h"
+#include "progdialog.h"
 
-class EncryptThread:public QThread
+class EncryptThread : public QThread
 {
 public:
-    explicit EncryptThread(QString _path, bool _flag);
+    explicit EncryptThread(QString path, QByteArray key, bool cryptflag);
     ~EncryptThread();
+
+protected:
     void run();
+    void encrypt();
+    void decrypt();
+
 private:
-    FileControl* fileCt;
+    TinyAES crypto;
     QString target;
-    bool cryptFlag;
+    QByteArray key;
+    bool cryptflag;
+    QWidget *w;
+    progdialog *pd;
+
+signals:
+    void changeNumber(int i);
+
 };
 
 #endif // ENCRYPTTHREAD_H

@@ -7,10 +7,11 @@
 #include <QString>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("ShellUSB");
+    ui->password->setText("1234");
 }
 
 MainWindow::~MainWindow()
@@ -26,9 +27,10 @@ void MainWindow::on_pushButton_clicked()
 
     password = ui->password->text();
 
-    QFile file("C:/Users/kuntae/Desktop/shellusbv0_2/password.txt.shellUSB");
+    QFile file("C:/Users/Simong/Desktop/shellusbv0_2/shellusbv0_2/password.shellUSB");
 
-    if(!file.open(QFile::ReadOnly)) {
+    if (!file.open(QFile::ReadOnly))
+    {
         qDebug() << "Could not open read file";
         return;
     }
@@ -40,7 +42,8 @@ void MainWindow::on_pushButton_clicked()
     QByteArray input = crypto.Decrypt(data, key);
     QString inputpwd(input);
 
-    if(!password.compare(inputpwd)) {
+    if (!password.compare(inputpwd))
+    {
         this->hide();
         shellusb shell;
         shell.setModal(true);

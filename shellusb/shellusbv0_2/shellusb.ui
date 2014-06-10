@@ -55,9 +55,9 @@
   <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>250</x>
      <y>40</y>
-     <width>661</width>
+     <width>421</width>
      <height>361</height>
     </rect>
    </property>
@@ -106,6 +106,16 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QTreeView" name="treeView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>231</width>
+     <height>361</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>
