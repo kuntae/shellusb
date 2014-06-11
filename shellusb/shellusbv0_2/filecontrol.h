@@ -18,6 +18,7 @@ public:
     ~FileControl();
     void file2enc();
     void file2dec();
+    void checkmaming();
 private:
     QString fname; //read || write file of name.
     TinyAES crypto;

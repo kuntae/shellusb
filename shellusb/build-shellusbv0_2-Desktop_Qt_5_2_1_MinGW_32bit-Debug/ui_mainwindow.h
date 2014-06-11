@@ -19,7 +19,6 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -31,7 +30,6 @@ public:
     QPushButton *pushButton;
     QLineEdit *password;
     QMenuBar *menuBar;
-    QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -53,9 +51,6 @@ public:
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 203, 21));
         MainWindow->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(MainWindow);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);

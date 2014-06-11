@@ -5,6 +5,7 @@
 
 #include <QFile>
 #include <QString>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -46,6 +47,8 @@ void MainWindow::on_pushButton_clicked()
         shell.setModal(true);
         shell.exec();
     }
-    else
+    else{
+        QMessageBox::warning(NULL,"Warning","비밀번호가 일치하지 않습니다.");
         ui->password->setText("");
+    }
 }

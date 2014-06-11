@@ -1,6 +1,7 @@
 #include "shellusb.h"
 #include "ui_shellusb.h"
 
+
 shellusb::shellusb(QWidget *parent) :
     QDialog(parent), ui(new Ui::shellusb), model(new QFileSystemModel(this)),lt(new std::list<QString>),iter(lt->rbegin())
 {
@@ -50,8 +51,7 @@ void shellusb::on_back_btn_clicked()
 void shellusb::on_front_btn_clicked()
 {
     ui->back_btn->setDisabled(false);
-    if(iter != lt->rbegin())
-    {
+    if(iter != lt->rbegin()){
         iter--;
         ui->tableView->setRootIndex(model->setRootPath(*iter));
     }
@@ -61,14 +61,14 @@ void shellusb::on_front_btn_clicked()
 
 void shellusb::on_tableView_doubleClicked(const QModelIndex &index)
 {
+
     if(model->fileInfo(index).isDir()){
         ui->tableView->setRootIndex(model->setRootPath(model->fileInfo(index).absoluteFilePath()));
         lt->push_back(model->fileInfo(index).absoluteFilePath());
         ui->back_btn->setDisabled(false);
     }
-    else
-    {
+    else{
         QDesktopServices* ds = new QDesktopServices;
-        ds->openUrl(QUrl(model->fileInfo(index).absoluteFilePath()));
+        ds->openUrl(QUrl(QUrl::fromLocalFile(model->fileInfo(index).absoluteFilePath())));
     }
 }
