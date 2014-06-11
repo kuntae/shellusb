@@ -19,6 +19,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTableView>
+#include <QtWidgets/QTreeView>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -37,6 +38,7 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QPushButton *back_btn;
     QPushButton *front_btn;
+    QTreeView *treeView;
 
     void setupUi(QDialog *shellusb)
     {
@@ -65,7 +67,7 @@ public:
 
         tableView = new QTableView(shellusb);
         tableView->setObjectName(QStringLiteral("tableView"));
-        tableView->setGeometry(QRect(10, 40, 661, 361));
+        tableView->setGeometry(QRect(250, 40, 421, 361));
         tableView->setDragDropMode(QAbstractItemView::DragDrop);
         tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
         help_btn = new QPushButton(shellusb);
@@ -87,6 +89,9 @@ public:
 
         horizontalLayout_2->addWidget(front_btn);
 
+        treeView = new QTreeView(shellusb);
+        treeView->setObjectName(QStringLiteral("treeView"));
+        treeView->setGeometry(QRect(10, 40, 231, 361));
 
         retranslateUi(shellusb);
 

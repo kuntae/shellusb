@@ -182,8 +182,10 @@ void shellusb::on_tableView_doubleClicked(const QModelIndex &index)
     // 파일을 더블클릭한 경우
     else
     {
+        QTextCodec* codec = QTextCodec::codecForLocale();
+        QString tmp = codec->toUnicode(model->fileInfo(index).absoluteFilePath().toLocal8Bit());
         QDesktopServices* ds = new QDesktopServices;
-        ds->openUrl(QUrl(model->fileInfo(index).absoluteFilePath()));
+        ds->openUrl(QUrl(tmp));
     }
 }
 

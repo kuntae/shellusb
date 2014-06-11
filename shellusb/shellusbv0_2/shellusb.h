@@ -13,6 +13,7 @@
 #include <QUrl>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QTextCodec>
 
 #include <list>
 #include <vector>
