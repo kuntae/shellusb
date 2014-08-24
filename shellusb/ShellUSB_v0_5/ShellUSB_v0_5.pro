@@ -17,14 +17,17 @@ SOURCES += main.cpp\
     encryptthread.cpp \
     progdialog.cpp \
     shellusb.cpp \
-    tinyaes.cpp
+    tinyaes.cpp \
+    settingdialog.cpp
 
 HEADERS  += mainwindow.h \
     encryptthread.h \
     progdialog.h \
     shellusb.h \
-    tinyaes.h
+    tinyaes.h \
+    settingdialog.h
 
 FORMS    += mainwindow.ui \
     progdialog.ui \
-    shellusb.ui
+    shellusb.ui \
+    settingdialog.ui
