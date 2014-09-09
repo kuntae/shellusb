@@ -10,6 +10,11 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    QDate date = QDate::currentDate();
+    QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
+    qDebug() << tmpdate<<endl;
+    LogThread::setLogFileName(tmpdate);
+
     this->setWindowTitle("ShellUSB");
     ui->setupUi(this);
     ui->password->setText("1234");
@@ -116,8 +121,7 @@ void MainWindow::on_pushButton_clicked()
 
     passWord = ui->password->text();
 
-    QFile file("C:/Users/Simong/Desktop/v0_5/ShellUSB_v0_5/password.ShellUSB");
-
+    QFile file("../ShellUSB_v0_5/password.ShellUSB");
     // open a password file
     if (!file.open(QFile::ReadOnly))
     {
@@ -145,7 +149,8 @@ void MainWindow::on_pushButton_clicked()
             return;
         }
         this->hide();
-
+        LogThread log("PASS//program start");
+        log.start();
         ShellUSB shell;
         shell.setModal(true);
         shell.exec();
@@ -155,6 +160,8 @@ void MainWindow::on_pushButton_clicked()
         ui->label_2->setText("Password Fail ");
         ui->password->setText("");
         failCnt++;
+        LogThread log("WARNING//Password Fail.");
+        log.start();
         if(failCnt >= 3) {
             inText = getString(6);
             distortImg(makeImg(inText));
