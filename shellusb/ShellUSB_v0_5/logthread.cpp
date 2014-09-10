@@ -4,7 +4,7 @@ QString LogThread::logFileName;
 
 LogThread::LogThread(QString str):QThread(), msg(str)
 {
-  connect( this, SIGNAL(finished()), this, SLOT(deleteLater()) );
+  //connect( this, SIGNAL(finished()), this, SLOT(deleteLater()) );
 }
 
 LogThread::~LogThread(){
