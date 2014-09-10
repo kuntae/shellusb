@@ -119,4 +119,4 @@ _vti_pvt/
 *.app
 
 back.png.*
-build-ShellUSB*/
+shellusb/build-ShellUSB*/
