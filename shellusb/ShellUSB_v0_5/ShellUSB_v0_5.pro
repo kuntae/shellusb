@@ -7,7 +7,7 @@
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+QMAKE_LFLAGS += /INCREMENTAL:NO
 TARGET = ShellUSB_v0_5
 TEMPLATE = app
 

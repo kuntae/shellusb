@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QDate date = QDate::currentDate();
     QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
     qDebug() << tmpdate<<endl;
-    LogThread::setLogFileName(tmpdate);
+    LogThread::logFileName = tmpdate;
 
     this->setWindowTitle("ShellUSB");
     ui->setupUi(this);
@@ -149,8 +149,8 @@ void MainWindow::on_pushButton_clicked()
             return;
         }
         this->hide();
-        LogThread log("PASS//program start");
-        log.start();
+//        LogThread log("PASS//program start");
+//        log.start();
         ShellUSB shell;
         shell.setModal(true);
         shell.exec();
@@ -160,8 +160,7 @@ void MainWindow::on_pushButton_clicked()
         ui->label_2->setText("Password Fail ");
         ui->password->setText("");
         failCnt++;
-        LogThread log("WARNING//Password Fail.");
-        log.start();
+
         if(failCnt >= 3) {
             inText = getString(6);
             distortImg(makeImg(inText));
@@ -172,6 +171,9 @@ void MainWindow::on_pushButton_clicked()
             ui->pushButton->setGeometry(110, 150, 81, 23);
             this->setFixedSize(287, 257);
         }
+        LogThread *log = new LogThread("WARNING//Password Fail.",this);
+        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+        log->start();
     }
 }
 
