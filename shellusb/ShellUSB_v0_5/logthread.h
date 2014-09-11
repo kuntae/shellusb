@@ -4,8 +4,8 @@
 #include <QtCore>
 #include <QString>
 #include <QDebug>
-#include <QString>
-#include <QDate>
+#include <QTextStream>
+#include <QTime>
 #include <QFile>
 
 class LogThread:public QThread
@@ -22,13 +22,12 @@ protected:
 
 
 signals:
-    void test();
 
 private slots:
 
 private:
   QString msg;
-  QDate date;
+  QTime time;
   QFile file;
 };
 

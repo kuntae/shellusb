@@ -149,8 +149,9 @@ void MainWindow::on_pushButton_clicked()
             return;
         }
         this->hide();
-//        LogThread log("PASS//program start");
-//        log.start();
+        LogThread *log = new LogThread("PASSED//Program start.",this);
+        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+        log->start();
         ShellUSB shell;
         shell.setModal(true);
         shell.exec();
