@@ -10,6 +10,8 @@
 #include <QPainter>
 #include <QTime>
 
+#include "logthread.h"
+
 namespace Ui {
 class MainWindow;
 }
