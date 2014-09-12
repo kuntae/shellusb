@@ -7,6 +7,12 @@
 #include <QFile>
 #include <QString>
 
+int MainWindow::failCnt;
+
+/**
+ * @brief 생성자
+ * @param parent
+ */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -26,8 +32,33 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label->hide();
     ui->lineEdit->hide();
     ui->pushButton_2->hide();
-    ui->pushButton->setGeometry(110, 50, 81, 23);
+    ui->pushButton->setGeometry(110, 75, 81, 23);
     this->setFixedSize(287, 121);
+
+    // 1. dark fusion 테마
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
+    darkPalette.setColor(QPalette::WindowText, Qt::white);
+    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor(QPalette::Text, Qt::white);
+    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    darkPalette.setColor(QPalette::BrightText, Qt::red);
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+
+    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+
+    qApp->setPalette(darkPalette);
+
+    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+
+    this->setWindowFlags(Qt::FramelessWindowHint);
 }
 
 MainWindow::~MainWindow()
@@ -111,7 +142,7 @@ void MainWindow::distortImg(QPixmap pixmap)
 }
 
 /**
- * @brief 로그인 버튼 클릭
+ * @brief 로그인 버튼 클릭 시 이벤트 처리 함수
  */
 void MainWindow::on_pushButton_clicked()
 {
@@ -121,7 +152,7 @@ void MainWindow::on_pushButton_clicked()
 
     passWord = ui->password->text();
 
-    QFile file("../shell/shell/ShellUSB_v0_5/password.ShellUSB");
+    QFile file("../ShellUSB_v0_5/password.ShellUSB");
     // open a password file
     if (!file.open(QFile::ReadOnly))
     {
@@ -169,8 +200,8 @@ void MainWindow::on_pushButton_clicked()
             ui->label->show();
             ui->lineEdit->show();
             ui->pushButton_2->show();
-            ui->pushButton->setGeometry(110, 150, 81, 23);
-            this->setFixedSize(287, 257);
+            ui->pushButton->setGeometry(110, 180, 81, 23);
+            this->setFixedSize(287, 237);
         }
         LogThread *log = new LogThread("WARNING//Password Fail.",this);
         connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
@@ -179,10 +210,26 @@ void MainWindow::on_pushButton_clicked()
 }
 
 /**
- * @brief Refresh 버튼 클릭
+ * @brief Refresh 버튼 클릭 시 이벤트 처리 함수
  */
 void MainWindow::on_pushButton_2_clicked()
 {
     inText = getString(6);
     distortImg(makeImg(inText));
+}
+
+/**
+ * @brief X버튼 클릭 시 이벤트 처리 함수
+ */
+void MainWindow::on_toolButton_clicked()
+{
+    this->close();
+}
+
+/**
+ * @brief 최소화 버튼 클릭 시 이벤트 처리 함수
+ */
+void MainWindow::on_toolButton_2_clicked()
+{
+    this->showMinimized();
 }

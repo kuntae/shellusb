@@ -9,6 +9,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QTime>
+#include <QStyleFactory>
 
 #include "logthread.h"
 
@@ -29,9 +30,13 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_toolButton_clicked();
+
+    void on_toolButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
-    int failCnt;
+    static int failCnt;
     QString inText;
     QString getString(int length);
     QPixmap makeImg(QString);

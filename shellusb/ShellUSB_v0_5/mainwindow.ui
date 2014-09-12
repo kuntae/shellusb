@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>251</height>
+    <height>237</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>150</y>
+      <y>180</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>10</y>
+      <y>40</y>
       <width>161</width>
       <height>21</height>
      </rect>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>29</x>
-      <y>121</y>
+      <y>151</y>
       <width>161</width>
       <height>20</height>
      </rect>
@@ -54,7 +54,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>40</y>
+      <y>70</y>
       <width>251</width>
       <height>71</height>
      </rect>
@@ -67,7 +67,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>120</y>
+      <y>150</y>
       <width>51</width>
       <height>23</height>
      </rect>
@@ -80,7 +80,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>180</y>
+      <y>200</y>
       <width>241</width>
       <height>16</height>
      </rect>
@@ -89,24 +89,32 @@
      <string>TextLabel</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>287</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <widget class="QToolButton" name="toolButton">
+    <property name="geometry">
+     <rect>
+      <x>261</x>
+      <y>-1</y>
+      <width>27</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_2">
+    <property name="geometry">
+     <rect>
+      <x>236</x>
+      <y>-1</y>
+      <width>27</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>_</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
