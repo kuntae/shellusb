@@ -118,4 +118,6 @@ _vti_pvt/
 *.out
 *.app
 
-shellusb/build-S*
+#setting file
+*.pro.user
+*.pro.user.*
