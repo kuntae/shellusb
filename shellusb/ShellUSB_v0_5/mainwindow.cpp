@@ -1,15 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "tinyaes.h"
-#include "shellusb.h"
-#include "settingdialog.h"
-
-#include <QFile>
-#include <QString>
-
-#include "loadingdialog.h"
-
 int MainWindow::failCnt;
 
 /**
@@ -68,27 +59,27 @@ MainWindow::MainWindow(QWidget *parent) :
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    QFile file("../ShellUSB_v0_5/sys/setting.txt");
+//    QFile file("../ShellUSB_v0_5/sys/setting.txt");
 
-    // 세팅이 없을 경우 SettingDialog를 불러온다.
-    if (!file.open(QFile::ReadOnly))
-    {
-        qDebug() << "Could not open read file";
-        SettingDialog settingDialog;
-        settingDialog.setModal(true);
-        settingDialog.exec();
-    }
+//    // 세팅이 없을 경우 SettingDialog를 불러온다.
+//    if (!file.open(QFile::ReadOnly))
+//    {
+//        qDebug() << "Could not open read file";
+//        SettingDialog settingDialog;
+//        settingDialog.setModal(true);
+//        settingDialog.exec();
+//    }
 
-    // 세팅이 있는 경우 SetUp클래스의 static변수에 각 내용을 저
-    QString line;
-    QTextStream in( &file );
-    while (!in.atEnd())
-    {
-        line = in.readLine();
-        qDebug() << line;
-    }
+//    // 세팅이 있는 경우 SetUp클래스의 static변수에 각 내용을 저
+//    QString line;
+//    QTextStream in( &file );
+//    while (!in.atEnd())
+//    {
+//        line = in.readLine();
+//        qDebug() << line;
+//    }
 
-    file.close();
+//    file.close();
 
 }
 

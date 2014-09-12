@@ -2,15 +2,21 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtDebug>
+#include <QDebug>
 #include <QFileInfo>
-
+#include <QFile>
+#include <QString>
 #include <qmath.h>
 #include <QPixmap>
 #include <QPainter>
 #include <QTime>
 #include <QStyleFactory>
 
+#include "tinyaes.h"
+#include "shellusb.h"
+#include "settingdialog.h"
+
+#include "loadingdialog.h"
 #include "logthread.h"
 #include "setup.h"
 

@@ -4,8 +4,14 @@
 #include <QDialog>
 #include <QTimer>
 #include <QDebug>
+#include <QString>
+#include <QDir>
+#include <QFile>
 
 #include "logthread.h"
+#include "tinyaes.h"
+#include "setup.h"
+#include "settingdialog.h"
 
 namespace Ui {
 class LoadingDialog;
@@ -18,10 +24,17 @@ class LoadingDialog : public QDialog
 public:
     explicit LoadingDialog(QWidget *parent = 0);
     ~LoadingDialog();
-    void setLogFileName();
+    void chkSysDirectory();
+    void chkShellusbFile();
+    void chkShellpieceFile();
+    void setLogFileName(QString name);
+
 private:
     Ui::LoadingDialog *ui;
     QTimer time;
+    const QString sysdir;
+    const QString shellusb;
+    const QString shellpiece;
 };
 
 #endif // LOADINGDIALOG_H
