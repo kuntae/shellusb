@@ -3,6 +3,7 @@
 
 #include "tinyaes.h"
 #include "shellusb.h"
+#include "settingdialog.h"
 
 #include <QFile>
 #include <QString>
@@ -16,6 +17,9 @@ int MainWindow::failCnt;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    SetUp::enc_url = "hi";
+    qDebug() << SetUp::enc_url <<endl;
+
     QDate date = QDate::currentDate();
     QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
     qDebug() << tmpdate<<endl;
@@ -35,9 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton->setGeometry(110, 75, 81, 23);
     this->setFixedSize(287, 121);
 
-    // 1. dark fusion 테마
+    // dark fusion 테마
     qApp->setStyle(QStyleFactory::create("Fusion"));
-
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, QColor(53,53,53));
     darkPalette.setColor(QPalette::WindowText, Qt::white);
@@ -50,15 +53,34 @@ MainWindow::MainWindow(QWidget *parent) :
     darkPalette.setColor(QPalette::ButtonText, Qt::white);
     darkPalette.setColor(QPalette::BrightText, Qt::red);
     darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-
     darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-
     qApp->setPalette(darkPalette);
-
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-
     this->setWindowFlags(Qt::FramelessWindowHint);
+
+    QFile file("../ShellUSB_v0_5/sys/setting.txt");
+
+    // 세팅이 없을 경우 SettingDialog를 불러온다.
+    if (!file.open(QFile::ReadOnly))
+    {
+        qDebug() << "Could not open read file";
+        SettingDialog settingDialog;
+        settingDialog.setModal(true);
+        settingDialog.exec();
+    }
+
+    // 세팅이 있는 경우 SetUp클래스의 static변수에 각 내용을 저
+    QString line;
+    QTextStream in( &file );
+    while (!in.atEnd())
+    {
+        line = in.readLine();
+        qDebug() << line;
+    }
+
+    file.close();
+
 }
 
 MainWindow::~MainWindow()
@@ -151,8 +173,9 @@ void MainWindow::on_pushButton_clicked()
     QByteArray key = crypto.HexStringToByte("1234");
 
     passWord = ui->password->text();
+    key = crypto.HexStringToByte(passWord);
 
-    QFile file("../ShellUSB_v0_5/password.ShellUSB");
+    QFile file("../ShellUSB_v0_5/sys/password.ShellUSB");
     // open a password file
     if (!file.open(QFile::ReadOnly))
     {

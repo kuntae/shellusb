@@ -12,6 +12,7 @@
 #include <QStyleFactory>
 
 #include "logthread.h"
+#include "setup.h"
 
 namespace Ui {
 class MainWindow;
