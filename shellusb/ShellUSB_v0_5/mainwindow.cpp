@@ -121,7 +121,7 @@ void MainWindow::on_pushButton_clicked()
 
     passWord = ui->password->text();
 
-    QFile file("../ShellUSB_v0_5/password.ShellUSB");
+    QFile file("../shell/shell/ShellUSB_v0_5/password.ShellUSB");
     // open a password file
     if (!file.open(QFile::ReadOnly))
     {
