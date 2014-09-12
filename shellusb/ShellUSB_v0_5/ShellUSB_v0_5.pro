@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     tinyaes.cpp \
     settingdialog.cpp \
     logthread.cpp \
-    setup.cpp
+    setup.cpp \
+    loadingdialog.cpp
 
 HEADERS  += mainwindow.h \
     encryptthread.h \
@@ -29,9 +30,13 @@ HEADERS  += mainwindow.h \
     tinyaes.h \
     settingdialog.h \
     logthread.h \
-    setup.h
+    setup.h \
+    loadingdialog.h
 
 FORMS    += mainwindow.ui \
     progdialog.ui \
     shellusb.ui \
-    settingdialog.ui
+    settingdialog.ui \
+    loadingdialog.ui
+
+RESOURCES +=

@@ -7,6 +7,8 @@
 #include <QFile>
 #include <QString>
 
+#include "loadingdialog.h"
+
 int MainWindow::failCnt;
 
 /**
@@ -16,6 +18,11 @@ int MainWindow::failCnt;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    this->hide();
+    LoadingDialog load;
+    load.setModal(true);
+    load.exec();
+
     QDate date = QDate::currentDate();
     QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
     qDebug() << tmpdate<<endl;
@@ -152,7 +159,7 @@ void MainWindow::on_pushButton_clicked()
 
     passWord = ui->password->text();
 
-    QFile file("../ShellUSB_v0_5/password.ShellUSB");
+    QFile file("./password.ShellUSB");
     // open a password file
     if (!file.open(QFile::ReadOnly))
     {
