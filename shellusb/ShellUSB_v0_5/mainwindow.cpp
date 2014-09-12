@@ -8,6 +8,8 @@
 #include <QFile>
 #include <QString>
 
+#include "loadingdialog.h"
+
 int MainWindow::failCnt;
 
 /**
@@ -17,13 +19,20 @@ int MainWindow::failCnt;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
+
     SetUp::enc_url = "hi";
     qDebug() << SetUp::enc_url <<endl;
 
-    QDate date = QDate::currentDate();
-    QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
-    qDebug() << tmpdate<<endl;
-    LogThread::logFileName = tmpdate;
+    this->hide();
+    LoadingDialog load;
+    load.setModal(true);
+    load.exec();
+
+
+//    QDate date = QDate::currentDate();
+//    QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
+//    qDebug() << tmpdate<<endl;
+//    LogThread::logFileName = tmpdate;
 
     this->setWindowTitle("ShellUSB");
     ui->setupUi(this);
@@ -175,7 +184,9 @@ void MainWindow::on_pushButton_clicked()
     passWord = ui->password->text();
     key = crypto.HexStringToByte(passWord);
 
+
     QFile file("../ShellUSB_v0_5/sys/password.ShellUSB");
+
     // open a password file
     if (!file.open(QFile::ReadOnly))
     {
