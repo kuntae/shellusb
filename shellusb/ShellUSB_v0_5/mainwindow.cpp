@@ -11,19 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
 
-    SetUp::enc_url = "hi";
-    qDebug() << SetUp::enc_url <<endl;
-
     this->hide();
     LoadingDialog load;
     load.setModal(true);
     load.exec();
-
-
-//    QDate date = QDate::currentDate();
-//    QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
-//    qDebug() << tmpdate<<endl;
-//    LogThread::logFileName = tmpdate;
 
     this->setWindowTitle("ShellUSB");
     ui->setupUi(this);
@@ -58,28 +49,6 @@ MainWindow::MainWindow(QWidget *parent) :
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
     this->setWindowFlags(Qt::FramelessWindowHint);
-
-//    QFile file("../ShellUSB_v0_5/sys/setting.txt");
-
-//    // 세팅이 없을 경우 SettingDialog를 불러온다.
-//    if (!file.open(QFile::ReadOnly))
-//    {
-//        qDebug() << "Could not open read file";
-//        SettingDialog settingDialog;
-//        settingDialog.setModal(true);
-//        settingDialog.exec();
-//    }
-
-//    // 세팅이 있는 경우 SetUp클래스의 static변수에 각 내용을 저
-//    QString line;
-//    QTextStream in( &file );
-//    while (!in.atEnd())
-//    {
-//        line = in.readLine();
-//        qDebug() << line;
-//    }
-
-//    file.close();
 
 }
 

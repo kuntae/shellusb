@@ -27,7 +27,7 @@ public:
     void chkSysDirectory();
     void chkShellusbFile();
     void chkShellpieceFile();
-    void setLogFileName(QString name);
+    void setLogFileName();
 
 private:
     Ui::LoadingDialog *ui;
