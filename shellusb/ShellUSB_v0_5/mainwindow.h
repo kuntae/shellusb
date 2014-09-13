@@ -12,7 +12,6 @@
 #include <QTime>
 #include <QStyleFactory>
 
-#include "tinyaes.h"
 #include "shellusb.h"
 #include "settingdialog.h"
 

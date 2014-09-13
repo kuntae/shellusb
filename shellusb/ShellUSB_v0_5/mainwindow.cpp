@@ -137,32 +137,12 @@ void MainWindow::distortImg(QPixmap pixmap)
  */
 void MainWindow::on_pushButton_clicked()
 {
-    TinyAES crypto;
     QString passWord;
-    QByteArray key = crypto.HexStringToByte("1234");
 
     passWord = ui->password->text();
-    key = crypto.HexStringToByte(passWord);
-
-
-    QFile file("../ShellUSB_v0_5/sys/password.ShellUSB");
-
-    // open a password file
-    if (!file.open(QFile::ReadOnly))
-    {
-        qDebug() << "Could not open read file";
-        return;
-    }
-
-    QByteArray data = file.readAll();
-
-    file.close();
-
-    QByteArray input = crypto.Decrypt(data, key);
-    QString inputPwd(input);
 
     // 패스워드가 맞은 경우
-    if (!passWord.compare(inputPwd))
+    if (!passWord.compare(SetUp::pwd))
     {
         // Catcha가 틀린 경우
         if(failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0) {

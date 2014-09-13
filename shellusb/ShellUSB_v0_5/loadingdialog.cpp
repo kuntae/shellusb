@@ -3,22 +3,27 @@
 
 LoadingDialog::LoadingDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::LoadingDialog),
-    sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiecce.bin")
+    sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiece.bin")
 {
     ui->setupUi(this);
 
     ui->label->setPixmap(QPixmap(this->sysdir + "ShellUSB.png"));
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-
-    SetUp::enc_url = "hi";
-    qDebug() << SetUp::enc_url <<endl;
-
     connect(&time,SIGNAL(timeout()),this, SLOT(close()));
 
+    ui->text_label->setText("check system diretory...");
     this->chkSysDirectory();
+    ui->text_label->setText("check system file...");
     this->chkShellusbFile();
     this->chkShellpieceFile();
+
+    if(SetUp::logFlag){
+        ui->text_label->setText("check log file...");
+        this->setLogFileName();
+        this->chkLogPeriod();
+    }
+    ui->text_label->setText("Welcome to ShellUSB...");
     time.start(1500);
 }
 
@@ -46,22 +51,63 @@ void LoadingDialog::chkSysDirectory(){
 void LoadingDialog::chkShellusbFile(){
     QFile file;
     file.setFileName(this->sysdir + this->shellusb);
+    file.open(QFile::ReadOnly);
     //check exists file.
     if(!file.exists()){
         SettingDialog settingDialog;
         settingDialog.setModal(true);
         settingDialog.exec();
     }
+    QString key;
+    QString value;
     QString line;
     QTextStream in( &file );
     while (!in.atEnd()){
+        key.clear();
+        value.clear();
         line = in.readLine();
-        qDebug() << line;
-    }
+        if(line.at(0) == '#') continue;
 
+        iter = line.begin();
+        for(iter; iter != line.end(); iter++){
+            if(*iter == ':'){
+                iter++;
+                break;
+            }
+            key.append(*iter);
+        }
+
+        for(iter; iter != line.end(); iter++){
+            value.append(*iter);
+        }
+
+
+        if(key == "enc") SetUp::encUrl = value;
+        else if(key == "dec") SetUp::decUrl = value;
+        else if(key == "byte") SetUp::byte = value.toInt();
+        else if(key == "lang") SetUp::lang = value;
+        else if(key == "flag") SetUp::logFlag = value.toInt();
+        else if(key == "period") SetUp::period = value.toInt();
+
+    }
     file.close();
 }
 
 void LoadingDialog::chkShellpieceFile(){
+    TinyAES crypto;
+    QByteArray datakey = crypto.HexStringToByte("1234");
+    QFile file;
+    file.setFileName(this->sysdir + this->shellpiece);
+    file.open(QFile::ReadOnly);
 
+    QByteArray data = file.readAll();
+    file.close();
+
+    QByteArray decData = crypto.Decrypt(data,datakey);
+    SetUp::pwd = QString(decData);
+
+}
+
+void LoadingDialog::chkLogPeriod(){
+    qDebug() << "call chkLogPeriod";
 }

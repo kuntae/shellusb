@@ -7,6 +7,7 @@
 #include <QString>
 #include <QDir>
 #include <QFile>
+#include <QDebug>
 
 #include "logthread.h"
 #include "tinyaes.h"
@@ -28,6 +29,7 @@ public:
     void chkShellusbFile();
     void chkShellpieceFile();
     void setLogFileName();
+    void chkLogPeriod();
 
 private:
     Ui::LoadingDialog *ui;
@@ -35,6 +37,7 @@ private:
     const QString sysdir;
     const QString shellusb;
     const QString shellpiece;
+    QString::iterator iter;
 };
 
 #endif // LOADINGDIALOG_H

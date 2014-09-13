@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>296</width>
-    <height>68</height>
+    <width>827</width>
+    <height>437</height>
    </rect>
   </property>
   <property name="cursor">
@@ -21,8 +21,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>296</width>
-     <height>68</height>
+     <width>827</width>
+     <height>437</height>
     </rect>
    </property>
    <property name="cursor">
@@ -33,6 +33,27 @@
    </property>
    <property name="pixmap">
     <pixmap>:/img/Lighthouse.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="text_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>405</y>
+     <width>321</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Monaco</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Starting ShellUSB...</string>
    </property>
   </widget>
  </widget>
