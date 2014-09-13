@@ -73,15 +73,16 @@ void SettingDialog::on_pushButton_3_clicked()
         out << period + "\n";
     }
     file.close();
+
     //write password file.
     TinyAES crypto;
     QByteArray key = crypto.HexStringToByte("1234");
-    QByteArray data = crypto.HexStringToByte(first);
-    QByteArray encPwd = crypto.Encrypt(data, key);
-    file.setFileName("./shell/sys/shellpiece.bin");
-    file.open(QFile::WriteOnly);
-    file.write(encPwd);
-    file.close();
+    QByteArray encPwd = crypto.Encrypt(first.toUtf8(), key);
+    QFile pwdFile;
+    pwdFile.setFileName("./shell/sys/shellpiece.bin");
+    if(!pwdFile.open(QFile::WriteOnly)) qDebug()<<__FILEW__ <<" password file";
+    pwdFile.write(encPwd);
+    pwdFile.close();
 
     emit(close());
 }

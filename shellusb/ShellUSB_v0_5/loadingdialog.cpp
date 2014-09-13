@@ -106,6 +106,7 @@ void LoadingDialog::chkShellpieceFile(){
     QByteArray decData = crypto.Decrypt(data,datakey);
     SetUp::pwd = QString(decData);
 
+    qDebug()<<"(" << SetUp::pwd <<")";
 }
 
 void LoadingDialog::chkLogPeriod(){
