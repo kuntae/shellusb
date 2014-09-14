@@ -204,6 +204,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
   </widget>
   <widget class="QLineEdit" name="password_2">
    <property name="geometry">
@@ -213,6 +216,9 @@
      <width>161</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_7">
