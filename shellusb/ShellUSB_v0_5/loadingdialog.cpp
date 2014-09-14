@@ -10,6 +10,7 @@ LoadingDialog::LoadingDialog(QWidget *parent) :
     ui->label->setPixmap(QPixmap(":/img/ShellUSB.png"));
     this->setWindowFlags(Qt::FramelessWindowHint);
 
+    //program logo default print time set.
     connect(&time,SIGNAL(timeout()),this, SLOT(close()));
 
     ui->text_label->setText("check system diretory...");
@@ -24,6 +25,7 @@ LoadingDialog::LoadingDialog(QWidget *parent) :
         this->chkLogPeriod();
     }
     ui->text_label->setText("Welcome to ShellUSB...");
+    //timer start. 1.5sec
     time.start(1500);
 }
 
@@ -32,14 +34,18 @@ LoadingDialog::~LoadingDialog()
     qDebug() << "close Loading Dialog";
     delete ui;
 }
-
+/**
+ * @brief init logfile name. "yy_mm_dd.log"
+ */
 void LoadingDialog::setLogFileName(){
         QDate date = QDate::currentDate();
         QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
         qDebug() << tmpdate<<endl;
         LogThread::logFileName = tmpdate;
 }
-
+/**
+ * @brief check shell/sys directory and make it.
+ */
 void LoadingDialog::chkSysDirectory(){
     QDir dir;
     if(!dir.exists(this->sysdir)){
@@ -47,7 +53,9 @@ void LoadingDialog::chkSysDirectory(){
         dir.mkpath(this->sysdir);
     }
 }
-
+/**
+ * @brief check system file. if don't exists, run Setting dialog.
+ */
 void LoadingDialog::chkShellusbFile(){
     QFile file;
     file.setFileName(this->sysdir + this->shellusb);
@@ -92,7 +100,9 @@ void LoadingDialog::chkShellusbFile(){
     }
     file.close();
 }
-
+/**
+ * @brief read and decrypt password file.
+ */
 void LoadingDialog::chkShellpieceFile(){
     TinyAES crypto;
     QByteArray datakey = crypto.HexStringToByte("1234");
@@ -109,6 +119,10 @@ void LoadingDialog::chkShellpieceFile(){
     qDebug()<<"(" << SetUp::pwd <<")";
 }
 
+/**
+ * @brief check log file. if log file name is delete name than delete file.
+ * 
+ */
 void LoadingDialog::chkLogPeriod(){
     qDebug() << "call chkLogPeriod";
 }
