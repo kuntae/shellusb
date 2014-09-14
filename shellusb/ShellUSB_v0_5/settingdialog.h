@@ -6,7 +6,8 @@
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
-
+#include <QMessageBox>
+#include <QStyleFactory>
 #include "tinyaes.h"
 
 namespace Ui {
@@ -20,6 +21,8 @@ class SettingDialog : public QDialog
 public:
     explicit SettingDialog(QWidget *parent = 0);
     ~SettingDialog();
+    void writeSysFile();
+    void writePwdFile();
 
 private slots:
     void on_pushButton_3_clicked();
@@ -32,6 +35,14 @@ signals:
     void noMatchPwd();
 private:
     Ui::SettingDialog *ui;
+    QString firstPwd;
+    QString secondPwd;
+    QString encUrl;
+    QString decUrl;
+    QString lang;
+    QString encrypt;
+    QString flag;
+    QString period;
 };
 
 #endif // SETTINGDIALOG_H

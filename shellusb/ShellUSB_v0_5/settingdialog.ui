@@ -97,6 +97,12 @@
    <property name="text">
     <string>AES-128</string>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <attribute name="buttonGroup">
+    <string notr="true">buttonGroup</string>
+   </attribute>
   </widget>
   <widget class="QRadioButton" name="aes_256">
    <property name="geometry">
@@ -110,6 +116,9 @@
    <property name="text">
     <string>AES-256</string>
    </property>
+   <attribute name="buttonGroup">
+    <string notr="true">buttonGroup</string>
+   </attribute>
   </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
@@ -316,6 +325,12 @@
    <property name="text">
     <string>사용</string>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <attribute name="buttonGroup">
+    <string notr="true">buttonGroup_2</string>
+   </attribute>
   </widget>
   <widget class="QRadioButton" name="log_not_use">
    <property name="geometry">
@@ -329,6 +344,9 @@
    <property name="text">
     <string>사용하지 않음</string>
    </property>
+   <attribute name="buttonGroup">
+    <string notr="true">buttonGroup_2</string>
+   </attribute>
   </widget>
   <widget class="QLabel" name="label_10">
    <property name="geometry">
@@ -346,4 +364,8 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
+ </buttongroups>
 </ui>
