@@ -39,4 +39,5 @@ FORMS    += mainwindow.ui \
     settingdialog.ui \
     loadingdialog.ui
 
-RESOURCES +=
+RESOURCES += \
+    img.qrc

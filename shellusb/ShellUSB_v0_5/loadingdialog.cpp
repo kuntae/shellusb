@@ -7,7 +7,7 @@ LoadingDialog::LoadingDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->label->setPixmap(QPixmap(this->sysdir + "ShellUSB.png"));
+    ui->label->setPixmap(QPixmap(":/img/ShellUSB.png"));
     this->setWindowFlags(Qt::FramelessWindowHint);
 
     connect(&time,SIGNAL(timeout()),this, SLOT(close()));

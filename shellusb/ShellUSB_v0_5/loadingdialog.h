@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QFile>
 #include <QDebug>
+#include <QUrl>
 
 #include "logthread.h"
 #include "tinyaes.h"
