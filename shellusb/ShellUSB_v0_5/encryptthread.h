@@ -2,6 +2,7 @@
 #define ENCRYPTTHREAD_H
 
 #include "tinyaes.h"
+#include "setup.h"
 
 #include <QThread>
 #include <QString>

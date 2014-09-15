@@ -10,7 +10,6 @@ int MainWindow::failCnt;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
-
     this->hide();
     LoadingDialog load;
     load.setModal(true);

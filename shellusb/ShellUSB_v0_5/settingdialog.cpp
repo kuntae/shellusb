@@ -10,6 +10,8 @@ SettingDialog::SettingDialog(QWidget *parent) :
 
     ui->enc_url->setText("./shell/enc");
     ui->dec_url->setText("./shell/dec");
+    ui->password->setText("1234");
+    ui->password_2->setText("1234");
 
     ui->file_system->setDisabled(true);
 
@@ -39,6 +41,9 @@ SettingDialog::~SettingDialog()
     delete ui;
 }
 
+/**
+ * @brief 확인 버튼 클릭 시 이벤트 처리 함수
+ */
 void SettingDialog::on_pushButton_3_clicked()
 {
     //password check.
@@ -78,6 +83,9 @@ void SettingDialog::on_pushButton_3_clicked()
     emit(close());
 }
 
+/**
+ * @brief shellusb.bin에 필요한 설정 내용을 저장
+ */
 void SettingDialog::writeSysFile(){
     QFile file;
     file.setFileName("./shell/sys/shellusb.bin");
@@ -87,21 +95,24 @@ void SettingDialog::writeSysFile(){
     //write file.
     out << "#directory of enc & dec";
     out << endl;
-    out << this->encUrl + "\n";
-    out << this->decUrl + "\n";
+    out << "enc:" << this->encUrl + "\n";
+    out << "dec:" << this->decUrl + "\n";
     out << "#encrypt byte\n";
-    out << this->encrypt + "\n";
+    out << "byte:" << this->encrypt + "\n";
     out << "#language\n";
-    out << this->lang + "\n";
+    out << "lang:" << this->lang + "\n";
     out << "#writing log file\n";
-    out << this->flag + "\n";
+    out << "flag:" << this->flag + "\n";
     if(this->flag == "1"){
         out << "#delete of log file\n";
-        out << this->period + "\n";
+        out << "period:" << this->period + "\n";
     }
     file.close();
 }
 
+/**
+ * @brief shellpiece.bin에 패스워드를 암호화하여 저장
+ */
 void SettingDialog::writePwdFile(){
     //write password file.
     TinyAES crypto;
@@ -122,4 +133,38 @@ void SettingDialog::on_log_use_clicked()
 void SettingDialog::on_log_not_use_clicked()
 {
     ui->log_period->setDisabled(true);
+}
+
+/**
+ * @brief enc_url 경로를 수정하는 이벤트 처리 함수
+ */
+void SettingDialog::on_pushButton_clicked()
+{
+    QFileDialog dialog(this);
+    QString path = ui->enc_url->text();
+    if(path.size() == 0) {
+        path = "C:/";
+    }
+
+    QString dirPath = dialog.getExistingDirectory(this, "암호화한 파일을 저장할 경로를 지정해주세요.", path);
+    if(dirPath.size() > 0) {
+        ui->enc_url->setText(dirPath);
+    }
+}
+
+/**
+ * @brief dec_url 경로를 수정하는 이벤트 처리 함수
+ */
+void SettingDialog::on_pushButton_2_clicked()
+{
+    QFileDialog dialog(this);
+    QString path = ui->dec_url->text();
+    if(path.size() == 0) {
+        path = "C:/";
+    }
+
+    QString dirPath = dialog.getExistingDirectory(this, "암호화를 푼 파일을 저장할 경로를 지정해주세요.", path);
+    if(dirPath.size() > 0) {
+        ui->dec_url->setText(dirPath);
+    }
 }

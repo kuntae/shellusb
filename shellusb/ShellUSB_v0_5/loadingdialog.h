@@ -36,6 +36,8 @@ private:
     Ui::LoadingDialog *ui;
     QTimer time;
     const QString sysdir;
+    const QString sysdirenc;
+    const QString sysdirdec;
     const QString shellusb;
     const QString shellpiece;
     QString::iterator iter;

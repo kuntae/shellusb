@@ -40,7 +40,17 @@ void EncryptThread::encrypt()
     QFile srcFile(srcPath);
 
     // set a target file path
-    QString tgtPath = srcPath + ".ShellUSB";
+    QString tgtPath;
+    // encUrl이 유효하면 encUrl을 사용
+    if(SetUp::encUrl.size() > 0) {
+        QFileInfo srcFileInfo(srcFile.fileName());
+        tgtPath = SetUp::encUrl + "/" + srcFileInfo.fileName();
+    }
+    // encUrl이 유효하지 않으면 현재 폴더에 암호화한다.
+    else {
+        tgtPath = srcPath;
+    }
+    tgtPath = tgtPath + ".ShellUSB";
     QFile tgtFile(tgtPath);
 
     // set a key
@@ -122,9 +132,22 @@ void EncryptThread::decrypt()
     QFile srcFile(srcPath);
 
     // set a target file path
-    int firstDot = srcPath.indexOf(":");
-    int lastDot = srcPath.lastIndexOf(".");
-    QString tgtPath = srcPath.mid(firstDot - 1, lastDot + 1);
+    QString tgtPath;
+    // decUrl이 유효하면 decUrl을 사용
+    if(SetUp::decUrl.size() > 0) {
+        QFileInfo srcFileInfo(srcFile.fileName());
+        tgtPath = SetUp::decUrl + "/" + srcFileInfo.fileName();
+        int lastDot = tgtPath.lastIndexOf(".");
+        tgtPath = tgtPath.mid(0, lastDot);
+    }
+    // decUrl이 유효하지 않으면 현재 폴더에 암호화한다.
+    else {
+        int lastDot = srcPath.lastIndexOf(".");
+        tgtPath = srcPath.mid(0, lastDot);
+    }
+
+    qDebug() << tgtPath;
+
     QFile tgtFile(tgtPath);
 
     // set a key

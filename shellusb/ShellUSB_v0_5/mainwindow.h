@@ -40,6 +40,8 @@ private slots:
 
     void on_toolButton_2_clicked();
 
+    void on_MainWindow_customContextMenuRequested(const QPoint &pos);
+
 private:
     Ui::MainWindow *ui;
     static int failCnt;

@@ -3,14 +3,15 @@
 
 LoadingDialog::LoadingDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::LoadingDialog),
-    sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiece.bin")
+    sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiece.bin"),
+    sysdirenc("./shell/enc/"),sysdirdec("./shell/dec/")
 {
     ui->setupUi(this);
 
     ui->label->setPixmap(QPixmap(":/img/ShellUSB.png"));
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    //program logo default print time set.
+    // program logo default print time set.
     connect(&time,SIGNAL(timeout()),this, SLOT(close()));
 
     ui->text_label->setText("check system diretory...");
@@ -52,6 +53,14 @@ void LoadingDialog::chkSysDirectory(){
         qDebug()<<"make sysdir.";
         dir.mkpath(this->sysdir);
     }
+    if(!dir.exists(this->sysdirenc)){
+        qDebug()<<"make sysdirenc.";
+        dir.mkpath(this->sysdirenc);
+    }
+    if(!dir.exists(this->sysdirdec)){
+        qDebug()<<"make sysdirdec.";
+        dir.mkpath(this->sysdirdec);
+    }
 }
 /**
  * @brief check system file. if don't exists, run Setting dialog.
@@ -65,7 +74,10 @@ void LoadingDialog::chkShellusbFile(){
         SettingDialog settingDialog;
         settingDialog.setModal(true);
         settingDialog.exec();
+        // file이 존재하지 않는다면 파일을 생성 후 다시 open
+        file.open(QFile::ReadOnly);
     }
+
     QString key;
     QString value;
     QString line;
@@ -89,14 +101,12 @@ void LoadingDialog::chkShellusbFile(){
             value.append(*iter);
         }
 
-
         if(key == "enc") SetUp::encUrl = value;
         else if(key == "dec") SetUp::decUrl = value;
         else if(key == "byte") SetUp::byte = value.toInt();
         else if(key == "lang") SetUp::lang = value;
         else if(key == "flag") SetUp::logFlag = value.toInt();
         else if(key == "period") SetUp::period = value.toInt();
-
     }
     file.close();
 }

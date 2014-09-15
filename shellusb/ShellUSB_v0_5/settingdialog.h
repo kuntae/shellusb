@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <QStyleFactory>
+#include <QFileDialog>
 #include "tinyaes.h"
 
 namespace Ui {
@@ -30,6 +31,10 @@ private slots:
     void on_log_use_clicked();
 
     void on_log_not_use_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 signals:
     void noMatchPwd();
