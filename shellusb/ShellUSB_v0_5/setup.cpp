@@ -5,7 +5,7 @@ QString SetUp::encUrl;
 QString SetUp::decUrl;
 
 //encrypt byte.
-int SetUp::byte;
+int SetUp::bit;
 
 //lenguage.
 QString SetUp::lang;

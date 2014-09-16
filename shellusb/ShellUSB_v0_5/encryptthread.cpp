@@ -33,7 +33,7 @@ void EncryptThread::run()
 void EncryptThread::encrypt()
 {
     QMutex mutex;
-    const int size = SetUp::byte;
+    const int size = SetUp::bit;
 
     // set a source file path
     QString srcPath = this->filePath;
@@ -134,7 +134,7 @@ void EncryptThread::encrypt()
 void EncryptThread::decrypt()
 {
     QMutex mutex;
-    const int size = SetUp::byte + 32;
+    const int size = SetUp::bit + 32;
 
     // set a source file path
     QString srcPath = this->filePath;

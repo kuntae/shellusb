@@ -98,7 +98,7 @@ void SettingDialog::writeSysFile(){
     out << "enc:" << this->encUrl + "\n";
     out << "dec:" << this->decUrl + "\n";
     out << "#encrypt byte\n";
-    out << "byte:" << this->encrypt + "\n";
+    out << "bit:" << this->encrypt + "\n";
     out << "#language\n";
     out << "lang:" << this->lang + "\n";
     out << "#writing log file\n";

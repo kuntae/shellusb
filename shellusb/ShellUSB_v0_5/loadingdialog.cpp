@@ -103,7 +103,7 @@ void LoadingDialog::chkShellusbFile(){
 
         if(key == "enc") SetUp::encUrl = value;
         else if(key == "dec") SetUp::decUrl = value;
-        else if(key == "byte") SetUp::byte = value.toInt();
+        else if(key == "bit") SetUp::bit = value.toInt();
         else if(key == "lang") SetUp::lang = value;
         else if(key == "flag") SetUp::logFlag = value.toInt();
         else if(key == "period") SetUp::period = value.toInt();

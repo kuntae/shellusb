@@ -10,7 +10,7 @@ public:
     //setting variable.
     static QString encUrl;
     static QString decUrl;
-    static int byte;
+    static int bit;
     static QString lang;
     static int logFlag;
     static int period;
