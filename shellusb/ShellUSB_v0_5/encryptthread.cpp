@@ -33,7 +33,7 @@ void EncryptThread::run()
 void EncryptThread::encrypt()
 {
     QMutex mutex;
-    const int size = 128;
+    const int size = SetUp::byte;
 
     // set a source file path
     QString srcPath = this->filePath;
@@ -41,15 +41,19 @@ void EncryptThread::encrypt()
 
     // set a target file path
     QString tgtPath;
+
     // encUrl이 유효하면 encUrl을 사용
-    if(SetUp::encUrl.size() > 0) {
+    if (SetUp::encUrl.size() > 0)
+    {
         QFileInfo srcFileInfo(srcFile.fileName());
         tgtPath = SetUp::encUrl + "/" + srcFileInfo.fileName();
     }
     // encUrl이 유효하지 않으면 현재 폴더에 암호화한다.
-    else {
+    else
+    {
         tgtPath = srcPath;
     }
+
     tgtPath = tgtPath + ".ShellUSB";
     QFile tgtFile(tgtPath);
 
@@ -84,10 +88,12 @@ void EncryptThread::encrypt()
     while (!srcFile.atEnd())
     {
         mutex.lock();
-        if(this->stop) {
+        if (this->stop)
+        {
             break;
         }
         mutex.unlock();
+
         buffer = srcFile.read(size);
         encrypted = crypto.Encrypt(buffer, key);
         tgtFile.write(encrypted);
@@ -100,6 +106,7 @@ void EncryptThread::encrypt()
             finalSize += onePercentSize;
             count++;
         }
+
         emit sinalUpdate(count);
     }
 
@@ -111,12 +118,14 @@ void EncryptThread::encrypt()
     tgtFile.close();
 
     // 비정상적으로 종료된 경우
-    if(this->stop) {
+    if (this->stop)
+    {
         // target file을 삭제
         tgtFile.remove();
     }
     // 정상적으로 종료된 경우
-    else {
+    else
+    {
         // source file을 삭제
         srcFile.remove();
     }
@@ -125,7 +134,7 @@ void EncryptThread::encrypt()
 void EncryptThread::decrypt()
 {
     QMutex mutex;
-    const int size = 160;
+    const int size = SetUp::byte + 32;
 
     // set a source file path
     QString srcPath = this->filePath;
@@ -133,15 +142,18 @@ void EncryptThread::decrypt()
 
     // set a target file path
     QString tgtPath;
+
     // decUrl이 유효하면 decUrl을 사용
-    if(SetUp::decUrl.size() > 0) {
+    if (SetUp::decUrl.size() > 0)
+    {
         QFileInfo srcFileInfo(srcFile.fileName());
         tgtPath = SetUp::decUrl + "/" + srcFileInfo.fileName();
         int lastDot = tgtPath.lastIndexOf(".");
         tgtPath = tgtPath.mid(0, lastDot);
     }
     // decUrl이 유효하지 않으면 현재 폴더에 암호화한다.
-    else {
+    else
+    {
         int lastDot = srcPath.lastIndexOf(".");
         tgtPath = srcPath.mid(0, lastDot);
     }
@@ -181,10 +193,12 @@ void EncryptThread::decrypt()
     while (!srcFile.atEnd())
     {
         mutex.lock();
-        if(this->stop) {
+        if (this->stop)
+        {
             break;
         }
         mutex.unlock();
+
         buffer = srcFile.read(size);
         decrypted = crypto.Decrypt(buffer, key);
         tgtFile.write(decrypted);
@@ -209,12 +223,14 @@ void EncryptThread::decrypt()
     tgtFile.close();
 
     // 비정상적으로 종료된 경우
-    if(this->stop) {
+    if (this->stop)
+    {
         // target file을 삭제
         tgtFile.remove();
     }
     // 정상적으로 종료된 경우
-    else {
+    else
+    {
         // source file을 삭제
         srcFile.remove();
     }
@@ -223,6 +239,5 @@ void EncryptThread::decrypt()
 void EncryptThread::cancelThread()
 {
     qDebug() << "call";
-
     return;
 }
