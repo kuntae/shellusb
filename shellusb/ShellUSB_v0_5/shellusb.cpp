@@ -12,22 +12,23 @@ ShellUSB::ShellUSB(QWidget *parent) :
 
     this->setWindowTitle("ShellUSB");
 
-    // 맨처음 경로 저장
-    lt->push_back(model->rootPath());
-
-    // 버튼 비활성화
+    // 버튼 비활성화.
     ui->front_btn->setDisabled(true); //if listFront !=NULL then front_btn enable else then front_btn disabled.
     ui->back_btn->setDisabled(true);
 
     model->setReadOnly(true);
 
     ui->tableView->setModel(model);
-    ui->tableView->setRootIndex(model->setRootPath("C:/Users/Simong/Desktop"));
+    ui->tableView->setRootIndex(model->setRootPath("."));
+
+    // 맨처음 경로 저장.
+    lt->push_back(model->rootPath());
+    iter = lt->rbegin();
 
     // set icon images
-    ui->back_btn->setIcon(QIcon("../ShellUSB_v0_5/back.png"));
-    ui->front_btn->setIcon(QIcon("../ShellUSB_v0_5/front.png"));
-    ui->help_btn->setIcon(QIcon("../ShellUSB_v0_5/help.png"));
+    ui->back_btn->setIcon(QIcon(":/img/back.png"));
+    ui->front_btn->setIcon(QIcon(":/img/front.png"));
+    ui->help_btn->setIcon(QIcon(":/img/help.png"));
 
     // drag and drop part
     ui->tableView->setAcceptDrops(true);
@@ -39,21 +40,21 @@ ShellUSB::ShellUSB(QWidget *parent) :
 
     // 왼쪽에 표시될 트리뷰(탐색기와 같은 효과)
     treeModel = new QDirModel(this);
-    treeModel->setReadOnly(true);   // 폴더나 파일을 추가, 삭제 불가능하도록 설정
-    treeModel->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name );    // 정렬
+    treeModel->setReadOnly(true);   // 폴더나 파일을 추가, 삭제 불가능하도록 설정.
+    treeModel->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name );    // 정렬.
 
-    // treeView에 프로그램이 실행된 Root 디렉토리를 표시
+    // treeView에 프로그램이 실행된 Root 디렉토리를 표시.
     QModelIndex index = treeModel->index(QDir::rootPath());
     ui->treeView->setModel(treeModel);
     ui->treeView->setRootIndex(index);
     ui->treeView->setCurrentIndex(index);
 
-    // treeView 이쁘게
+    // treeView 이쁘게.
     ui->treeView->expand(index);
     ui->treeView->scrollTo(index);
     ui->treeView->resizeColumnToContents(0);
 
-    // 1. dark fusion 테마
+    // 1. dark fusion 테마.
     qApp->setStyle(QStyleFactory::create("Fusion"));
 
     QPalette darkPalette;
@@ -76,8 +77,7 @@ ShellUSB::ShellUSB(QWidget *parent) :
 
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
-    this->setWindowFlags(Qt::FramelessWindowHint);
-
+    //this->setWindowFlags(Qt::FramelessWindowHint);
 }
 
 ShellUSB::~ShellUSB()
@@ -86,7 +86,7 @@ ShellUSB::~ShellUSB()
 }
 
 /**
- * @brief enc 버튼 클릭 시 이벤트 처리 함수
+ * @brief enc 버튼 클릭 시 이벤트 처리 함수.
  */
 void ShellUSB::on_enc_btn_clicked()
 {
@@ -115,7 +115,7 @@ void ShellUSB::on_enc_btn_clicked()
         return;
     }
 
-    // ProgDialog 생성
+    // ProgDialog 생성.
     ProgDialog *progDialog = new ProgDialog(this);
     progDialog->init(model->fileInfo(index).absoluteFilePath(), key, true);
     progDialog->show();
@@ -151,7 +151,7 @@ void ShellUSB::on_dnc_btn_clicked()
         return;
     }
 
-    // ProgDialog 생성
+    // ProgDialog 생성.
     ProgDialog *progDialog = new ProgDialog(this);
     progDialog->init(model->fileInfo(index).absoluteFilePath(), key, false);
     progDialog->show();
@@ -162,14 +162,18 @@ void ShellUSB::on_dnc_btn_clicked()
  */
 void ShellUSB::on_back_btn_clicked()
 {
-    // 뒤로 이동
+    qDebug() << *iter;
+    // 뒤로 이동.
     iter++;
+    qDebug() << *iter;
     ui->tableView->setRootIndex(model->setRootPath(*iter));
 
-    // front 버튼 활성화
+    // front 버튼 활성화.
     ui->front_btn->setDisabled(false);
 
-    // 리스트의 맨 앞인 경우 back버튼 비활성화
+    qDebug() << "lt size: " << lt->size();
+
+    // 리스트의 맨 앞인 경우 back버튼 비활성화.
     if (iter == --lt->rend())
         ui->back_btn->setDisabled(true);
 }
@@ -179,14 +183,14 @@ void ShellUSB::on_back_btn_clicked()
  */
 void ShellUSB::on_front_btn_clicked()
 {
-    // 앞으로 이동
+    // 앞으로 이동.
     iter--;
     ui->tableView->setRootIndex(model->setRootPath(*iter));
 
-    // back버튼 활성화
+    // back버튼 활성화.
     ui->back_btn->setDisabled(false);
 
-    // 리스트의 맨 뒤인 경우 front버튼 비활성화
+    // 리스트의 맨 뒤인 경우 front버튼 비활성화.
     if (iter == lt->rbegin())
         ui->front_btn->setDisabled(true);
 }
@@ -197,7 +201,7 @@ void ShellUSB::on_front_btn_clicked()
  */
 void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
 {
-    // 디렉토리를 더블클릭한 경우
+    // 디렉토리를 더블클릭한 경우.
     if (model->fileInfo(index).isDir())
     {
         // iter 뒤에 있는 lt의 노드들을 삭제한다.
@@ -206,6 +210,7 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
 
         while (it != lt->rend())
         {
+            qDebug() << "node delete";
             if(it == iter)
                 break;
             else
@@ -217,15 +222,16 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
 
         // lt 뒤에 새로운 위치 add
         lt->push_back(model->fileInfo(index).absoluteFilePath());
+        iter = lt->rbegin();
 
-        // 더블클릭한 위치로 이동
+        // 더블클릭한 위치로 이동.
         ui->tableView->setRootIndex(model->setRootPath(model->fileInfo(index).absoluteFilePath()));
 
-        // back버튼 활성화/ front버튼 비활성화
+        // back버튼 활성화/ front버튼 비활성화.
         ui->back_btn->setDisabled(false);
         ui->front_btn->setDisabled(true);
     }
-    // 파일을 더블클릭한 경우
+    // 파일을 더블클릭한 경우.
     else
     {
         QDesktopServices* ds = new QDesktopServices;
@@ -239,11 +245,11 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
  */
 void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
 {
-    // 선택된 파일 or 디렉토리 경로
+    // 선택된 파일 or 디렉토리 경로.
     QString path = treeModel->filePath(treeIndex);
     QFileInfo pathInfo(path);
 
-    // 디렉토리 일 경우
+    // 디렉토리 일 경우.
     if (pathInfo.isDir())
     {
         // iter뒤에 있는 lt의 노드들을 삭제한다.
@@ -269,27 +275,11 @@ void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
         lt->push_back(newPath);
         iter = lt->rbegin();
 
-        // treeView에서 선택한 위치로 tableView 이동
+        // treeView에서 선택한 위치로 tableView 이동.
         ui->tableView->setRootIndex(model->setRootPath(path));
 
-        // back버튼 활성화/ front버튼 비활성화
+        // back버튼 활성화/ front버튼 비활성화.
         ui->back_btn->setDisabled(false);
         ui->front_btn->setDisabled(true);
     }
-}
-
-/**
- * @brief X버튼 클릭 시 이벤트 처리 함
- */
-void ShellUSB::on_toolButton_clicked()
-{
-    this->close();
-}
-
-/**
- * @brief 최소화 버튼 클릭 시 이벤트 처리 함수
- */
-void ShellUSB::on_toolButton_2_clicked()
-{
-    this->showMinimized();
 }

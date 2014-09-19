@@ -41,10 +41,6 @@ private slots:
     void on_tableView_doubleClicked(const QModelIndex &index);
     void on_treeView_clicked(const QModelIndex &treeIndex);
 
-    void on_toolButton_clicked();
-
-    void on_toolButton_2_clicked();
-
 private:
     TinyAES crypto;
     bool ok;

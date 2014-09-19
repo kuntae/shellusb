@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     inText = getString(6);
     failCnt = 0;
 
-    //보안문자 숨기기
+    //보안문자 숨기기.
     ui->label->setVisible(false);
     ui->label->hide();
     ui->lineEdit->hide();
@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton->setGeometry(110, 75, 81, 23);
     this->setFixedSize(287, 121);
 
-    // dark fusion 테마
+    // dark fusion 테마.
     qApp->setStyle(QStyleFactory::create("Fusion"));
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, QColor(53,53,53));
@@ -47,7 +47,6 @@ MainWindow::MainWindow(QWidget *parent) :
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-    this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
 }
 
 MainWindow::~MainWindow()
@@ -139,10 +138,10 @@ void MainWindow::on_pushButton_clicked()
 
     passWord = ui->password->text();
 
-    // 패스워드가 맞은 경우
+    // 패스워드가 맞은 경우.
     if (!passWord.compare(SetUp::pwd))
     {
-        // Catcha가 틀린 경우
+        // Catcha가 틀린 경우.
         if(failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0) {
             //ui->label_2->setText("They are different.");
             inText = getString(6);
@@ -159,7 +158,7 @@ void MainWindow::on_pushButton_clicked()
         shell.setModal(true);
         shell.exec();
     }
-    // 패스워드가 틀린 경우
+    // 패스워드가 틀린 경우.
     else {
         ui->label_2->setText("Password Fail ");
         ui->password->setText("");
@@ -188,20 +187,4 @@ void MainWindow::on_pushButton_2_clicked()
 {
     inText = getString(6);
     distortImg(makeImg(inText));
-}
-
-/**
- * @brief X버튼 클릭 시 이벤트 처리 함수
- */
-void MainWindow::on_toolButton_clicked()
-{
-    this->close();
-}
-
-/**
- * @brief 최소화 버튼 클릭 시 이벤트 처리 함수
- */
-void MainWindow::on_toolButton_2_clicked()
-{
-    this->showMinimized();
 }

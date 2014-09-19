@@ -18,18 +18,18 @@ void ProgDialog::init(QString filePath, QByteArray key, bool cryptFlag) {
     else
         this->setWindowTitle("<Decrypting> " + fileName);
 
-    // 암복호화 쓰레드 생성
+    // 암복호화 쓰레드 생성.
     encryptThread = new EncryptThread(this);
     encryptThread->init(filePath, key, cryptFlag);
 
-    // 암복호화 완료 시 encryptThread, prodDialog 소멸
+    // 암복호화 완료 시 encryptThread, prodDialog 소멸.
     connect(encryptThread, SIGNAL(finished()), encryptThread, SLOT(deleteLater()));
     connect(encryptThread, SIGNAL(finished()), this, SLOT(deleteLater()));
 
-    // 암복호화 진행상태를 표시
+    // 암복호화 진행상태를 표시.
     connect(encryptThread, SIGNAL(sinalUpdate(int)), this, SLOT(updatePd(int)));
 
-    // 암복호화 쓰레드 시작
+    // 암복호화 쓰레드 시작.
     encryptThread->start();
 }
 
@@ -46,6 +46,6 @@ void ProgDialog::updatePd(int i)
 
 void ProgDialog::on_cancel_clicked()
 {
-    // QMutex를 사용해 쓰레드를 종료
+    // QMutex를 사용해 쓰레드를 종료.
     encryptThread->stop = true;
 }

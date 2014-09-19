@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/img">
         <file>ShellUSB.png</file>
+        <file>back.png</file>
+        <file>front.png</file>
+        <file>help.png</file>
     </qresource>
 </RCC>

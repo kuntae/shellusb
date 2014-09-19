@@ -42,7 +42,7 @@ void EncryptThread::encrypt()
     // set a target file path
     QString tgtPath;
 
-    // encUrl이 유효하면 encUrl을 사용
+    // encUrl이 유효하면 encUrl을 사용.
     if (SetUp::encUrl.size() > 0)
     {
         QFileInfo srcFileInfo(srcFile.fileName());
@@ -117,16 +117,16 @@ void EncryptThread::encrypt()
     tgtFile.flush();
     tgtFile.close();
 
-    // 비정상적으로 종료된 경우
+    // 비정상적으로 종료된 경우.
     if (this->stop)
     {
-        // target file을 삭제
+        // target file을 삭제.
         tgtFile.remove();
     }
-    // 정상적으로 종료된 경우
+    // 정상적으로 종료된 경우.
     else
     {
-        // source file을 삭제
+        // source file을 삭제.
         srcFile.remove();
     }
 }
@@ -143,7 +143,7 @@ void EncryptThread::decrypt()
     // set a target file path
     QString tgtPath;
 
-    // decUrl이 유효하면 decUrl을 사용
+    // decUrl이 유효하면 decUrl을 사용.
     if (SetUp::decUrl.size() > 0)
     {
         QFileInfo srcFileInfo(srcFile.fileName());
@@ -222,16 +222,16 @@ void EncryptThread::decrypt()
     tgtFile.flush();
     tgtFile.close();
 
-    // 비정상적으로 종료된 경우
+    // 비정상적으로 종료된 경우.
     if (this->stop)
     {
-        // target file을 삭제
+        // target file을 삭제.
         tgtFile.remove();
     }
-    // 정상적으로 종료된 경우
+    // 정상적으로 종료된 경우.
     else
     {
-        // source file을 삭제
+        // source file을 삭제.
         srcFile.remove();
     }
 }

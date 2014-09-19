@@ -15,7 +15,7 @@ SettingDialog::SettingDialog(QWidget *parent) :
 
     ui->file_system->setDisabled(true);
 
-    // dark fusion 테마
+    // dark fusion 테마.
     qApp->setStyle(QStyleFactory::create("Fusion"));
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, QColor(53,53,53));
