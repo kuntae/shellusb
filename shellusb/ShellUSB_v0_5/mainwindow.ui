@@ -89,32 +89,6 @@
      <string>TextLabel</string>
     </property>
    </widget>
-   <widget class="QToolButton" name="toolButton">
-    <property name="geometry">
-     <rect>
-      <x>261</x>
-      <y>-1</y>
-      <width>27</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>X</string>
-    </property>
-   </widget>
-   <widget class="QToolButton" name="toolButton_2">
-    <property name="geometry">
-     <rect>
-      <x>236</x>
-      <y>-1</y>
-      <width>27</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>_</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

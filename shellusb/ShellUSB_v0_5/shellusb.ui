@@ -71,8 +71,8 @@
   <widget class="QPushButton" name="help_btn">
    <property name="geometry">
     <rect>
-     <x>606</x>
-     <y>-1</y>
+     <x>650</x>
+     <y>0</y>
      <width>31</width>
      <height>21</height>
     </rect>
@@ -115,32 +115,6 @@
      <width>231</width>
      <height>361</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="toolButton">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>-1</y>
-     <width>27</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>X</string>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="toolButton_2">
-   <property name="geometry">
-    <rect>
-     <x>635</x>
-     <y>-1</y>
-     <width>27</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>_</string>
    </property>
   </widget>
  </widget>

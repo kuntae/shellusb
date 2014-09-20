@@ -16,10 +16,12 @@ LoadingDialog::LoadingDialog(QWidget *parent) :
 
     ui->text_label->setText("check system diretory...");
     this->chkSysDirectory();
+
     ui->text_label->setText("check system file...");
     this->chkShellusbFile();
     this->chkShellpieceFile();
-
+    ui->text_label->setText("check system diretory...");
+    this->chkSysDirectory();
     if(SetUp::logFlag){
         ui->text_label->setText("check log file...");
         this->setLogFileName();
@@ -42,7 +44,7 @@ void LoadingDialog::setLogFileName(){
         QDate date = QDate::currentDate();
         QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
         qDebug() << tmpdate<<endl;
-        LogThread::logFileName = tmpdate;
+        LogThread::logFileName = sysdir +"log/" + tmpdate;
 }
 /**
  * @brief check shell/sys directory and make it.
@@ -51,15 +53,15 @@ void LoadingDialog::chkSysDirectory(){
     QDir dir;
     if(!dir.exists(this->sysdir)){
         qDebug()<<"make sysdir.";
-        dir.mkpath(this->sysdir);
+        dir.mkpath(this->sysdir+"log/");
     }
-    if(!dir.exists(this->sysdirenc)){
+    if(!dir.exists(this->sysdirenc) && !SetUp::encUrl.isEmpty()){
         qDebug()<<"make sysdirenc.";
-        dir.mkpath(this->sysdirenc);
+        dir.mkpath(SetUp::encUrl);
     }
-    if(!dir.exists(this->sysdirdec)){
+    if(!dir.exists(this->sysdirdec) && !SetUp::decUrl.isEmpty()){
         qDebug()<<"make sysdirdec.";
-        dir.mkpath(this->sysdirdec);
+        dir.mkpath(SetUp::decUrl);
     }
 }
 /**

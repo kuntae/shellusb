@@ -10,12 +10,13 @@ int MainWindow::failCnt;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
+
     this->hide();
     LoadingDialog load;
     load.setModal(true);
     load.exec();
 
-    this->setWindowTitle("ShellUSB");
+
     ui->setupUi(this);
     ui->password->setText("1234");
     inText = getString(6);
@@ -47,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-    this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+    this->setWindowTitle("ShellUSB");
 }
 
 MainWindow::~MainWindow()
@@ -143,18 +144,24 @@ void MainWindow::on_pushButton_clicked()
     if (!passWord.compare(SetUp::pwd))
     {
         // Catcha가 틀린 경우
-        if(failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0) {
-            //ui->label_2->setText("They are different.");
+        if(failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0) {           
             inText = getString(6);
             distortImg(makeImg(inText));
             ui->password->setText("");
             ui->label_2->setText("Catcha Fail ");
+            if(SetUp::logFlag){
+                LogThread *log = new LogThread("WARNING//Security String no match",this);
+                connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+                log->start();
+            }
             return;
         }
         this->hide();
-        LogThread *log = new LogThread("PASSED//Program start.",this);
-        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
-        log->start();
+        if(SetUp::logFlag){
+            LogThread *log = new LogThread("PASSED//Program start.",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         ShellUSB shell;
         shell.setModal(true);
         shell.exec();
@@ -175,9 +182,11 @@ void MainWindow::on_pushButton_clicked()
             ui->pushButton->setGeometry(110, 180, 81, 23);
             this->setFixedSize(287, 237);
         }
-        LogThread *log = new LogThread("WARNING//Password Fail.",this);
-        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
-        log->start();
+        if(SetUp::logFlag){
+            LogThread *log = new LogThread("WARNING//Password Fail.",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
     }
 }
 
@@ -190,18 +199,4 @@ void MainWindow::on_pushButton_2_clicked()
     distortImg(makeImg(inText));
 }
 
-/**
- * @brief X버튼 클릭 시 이벤트 처리 함수
- */
-void MainWindow::on_toolButton_clicked()
-{
-    this->close();
-}
 
-/**
- * @brief 최소화 버튼 클릭 시 이벤트 처리 함수
- */
-void MainWindow::on_toolButton_2_clicked()
-{
-    this->showMinimized();
-}

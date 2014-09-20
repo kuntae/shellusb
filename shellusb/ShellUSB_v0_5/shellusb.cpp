@@ -22,12 +22,13 @@ ShellUSB::ShellUSB(QWidget *parent) :
     model->setReadOnly(true);
 
     ui->tableView->setModel(model);
-    ui->tableView->setRootIndex(model->setRootPath("C:/Users/Simong/Desktop"));
+
+    ui->tableView->setRootIndex(model->setRootPath(SetUp::encUrl));
 
     // set icon images
-    ui->back_btn->setIcon(QIcon("../ShellUSB_v0_5/back.png"));
-    ui->front_btn->setIcon(QIcon("../ShellUSB_v0_5/front.png"));
-    ui->help_btn->setIcon(QIcon("../ShellUSB_v0_5/help.png"));
+    ui->back_btn->setIcon(QIcon(":/img/back.png"));
+    ui->front_btn->setIcon(QIcon(":/img/front.png"));
+    ui->help_btn->setIcon(QIcon(":/img/help.png"));
 
     // drag and drop part
     ui->tableView->setAcceptDrops(true);
@@ -76,7 +77,7 @@ ShellUSB::ShellUSB(QWidget *parent) :
 
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
-    this->setWindowFlags(Qt::FramelessWindowHint);
+
 
 }
 

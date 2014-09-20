@@ -33,7 +33,7 @@ SettingDialog::SettingDialog(QWidget *parent) :
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-    //this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setWindowTitle("ShellUSB");
 }
 
 SettingDialog::~SettingDialog()
