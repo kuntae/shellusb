@@ -20,6 +20,8 @@
 #include <list>
 #include <vector>
 #include <QStyleFactory>
+#include <QTextCodec>
+
 
 namespace Ui {
 class ShellUSB;
@@ -41,9 +43,7 @@ private slots:
     void on_tableView_doubleClicked(const QModelIndex &index);
     void on_treeView_clicked(const QModelIndex &treeIndex);
 
-    void on_toolButton_clicked();
 
-    void on_toolButton_2_clicked();
 
 private:
     TinyAES crypto;
@@ -53,6 +53,9 @@ private:
     QDirModel *treeModel;       // treeView에 사용될 모델
     std::list<QString>* lt;
     std::list<QString>::reverse_iterator iter;
+
+    QFileSystemModel *dirModel;
+    QFileSystemModel *fileModel;
 };
 
 #endif // SHELLUSB_H
