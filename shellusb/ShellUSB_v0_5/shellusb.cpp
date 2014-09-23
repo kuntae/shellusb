@@ -37,14 +37,14 @@ ShellUSB::ShellUSB(QWidget *parent) :
 
     // 맨처음 경로 저장
     //model->setRootPath(SetUp::encUrl);
-    lt->push_back(model->rootPath());
+
 
     // 버튼 비활성화
     ui->front_btn->setDisabled(true); //if listFront !=NULL then front_btn enable else then front_btn disabled.
     ui->back_btn->setDisabled(true);
 
-    model->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
-    model->setReadOnly(true);
+//    model->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
+//    model->setReadOnly(true);
     //model->setRootPath(SetUp::encUrl);
 
     //ui->tableView->setModel(model);
@@ -92,6 +92,7 @@ ShellUSB::ShellUSB(QWidget *parent) :
     dirModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
 
     dirModel->setRootPath(SetUp::encUrl);
+    lt->push_back(dirModel->rootPath());
     index = dirModel->index(SetUp::encUrl);
     ui->treeView->setModel(dirModel);
     ui->treeView->setColumnHidden(1,true);
@@ -105,6 +106,12 @@ ShellUSB::ShellUSB(QWidget *parent) :
     index = fileModel->index(SetUp::encUrl);
     ui->tableView->setModel(fileModel);
     ui->tableView->setRootIndex(index);
+    ui->tableView->setAcceptDrops(true);
+    ui->tableView->setDragEnabled(true);
+    ui->tableView->setDropIndicatorShown(true);
+    ui->tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    ui->tableView->setDefaultDropAction(Qt::MoveAction);
+    ui->tableView->setDragDropMode(QAbstractItemView::DragDrop);
 }
 
 ShellUSB::~ShellUSB()
