@@ -224,33 +224,33 @@
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
-     <x>65</x>
+     <x>10</x>
      <y>240</y>
-     <width>31</width>
+     <width>81</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>로그</string>
+    <string>사용기록 저장</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>15</x>
+     <x>10</x>
      <y>273</y>
-     <width>81</width>
+     <width>111</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>로그 저장기간</string>
+    <string>사용기록 알림</string>
    </property>
   </widget>
   <widget class="QComboBox" name="log_period">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>120</x>
      <y>270</y>
      <width>76</width>
      <height>22</height>
@@ -266,24 +266,19 @@
    </item>
    <item>
     <property name="text">
-     <string>3</string>
+     <string>5</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>7</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>14</string>
+     <string>No Notice</string>
     </property>
    </item>
   </widget>
   <widget class="QComboBox" name="file_system">
    <property name="geometry">
     <rect>
-     <x>99</x>
+     <x>119</x>
      <y>303</y>
      <width>76</width>
      <height>22</height>
@@ -357,21 +352,21 @@
   <widget class="QLabel" name="label_10">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>210</x>
      <y>276</y>
      <width>56</width>
      <height>12</height>
     </rect>
    </property>
    <property name="text">
-    <string>일</string>
+    <string>MB</string>
    </property>
   </widget>
  </widget>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

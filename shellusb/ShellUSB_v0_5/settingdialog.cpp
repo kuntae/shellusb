@@ -52,7 +52,7 @@ void SettingDialog::on_pushButton_3_clicked()
 
     if(this->firstPwd != this->secondPwd || (this->firstPwd.isEmpty() || this->secondPwd.isEmpty())){
         qDebug() << "no match";
-        QMessageBox::information(this, "NO MATCH PASSWORD.","NO MATCH PASSWORD.");
+        QMessageBox::warning(this, "Warning","NO MATCH PASSWORD.");
         emit(noMatchPwd());
         return;
     }
@@ -72,7 +72,10 @@ void SettingDialog::on_pushButton_3_clicked()
 
     if(ui->log_use->isChecked()){
         this->flag = "1";
-        this->period = ui->log_period->currentText();
+        if(ui->log_period->currentText().compare("No Notice")==0)
+            this->period = "0";
+        else
+            this->period = ui->log_period->currentText();
     }else{
         this->flag = "0";
     }

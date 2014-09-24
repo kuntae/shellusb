@@ -1,6 +1,7 @@
 #include "loadingdialog.h"
 #include "ui_loadingdialog.h"
 
+
 LoadingDialog::LoadingDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::LoadingDialog),
     sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiece.bin"),
@@ -72,14 +73,14 @@ void LoadingDialog::chkShellusbFile(){
     file.setFileName(this->sysdir + this->shellusb);
     file.open(QFile::ReadOnly);
     //check exists file.
-    if(!file.exists()){
+    while(!file.exists()){
         SettingDialog settingDialog;
         settingDialog.setModal(true);
         settingDialog.exec();
-        // file이 존재하지 않는다면 파일을 생성 후 다시 open
-        file.open(QFile::ReadOnly);
-    }
 
+    }
+    // file이 존재하지 않는다면 파일을 생성 후 다시 open
+    file.open(QFile::ReadOnly);
     QString key;
     QString value;
     QString line;
@@ -121,7 +122,15 @@ void LoadingDialog::chkShellpieceFile(){
     QFile file;
     file.setFileName(this->sysdir + this->shellpiece);
     file.open(QFile::ReadOnly);
+    //check exists file.
+    while(!file.exists()){
+        SettingDialog settingDialog;
+        settingDialog.setModal(true);
+        settingDialog.exec();
 
+    }
+    // file이 존재하지 않는다면 파일을 생성 후 다시 open
+    file.open(QFile::ReadOnly);
     QByteArray data = file.readAll();
     file.close();
 
@@ -136,5 +145,57 @@ void LoadingDialog::chkShellpieceFile(){
  * 
  */
 void LoadingDialog::chkLogPeriod(){
-    qDebug() << "call chkLogPeriod";
+    QMessageBox::StandardButton btn;
+    qint64 size = 0;
+    QDir dir(this->sysdir+"log");
+    qDebug() <<"#"+dir.path();
+    if(dir.exists() && SetUp::period != 0){
+        size = getsize(dir.path());
+        if(size >= SetUp::period * 1024 * 1024){
+            btn = QMessageBox::question(this, "Information","Log file is overflow "+
+                                        QString::number(SetUp::period) + " MB.\n delete?",
+                                        QMessageBox::Yes|QMessageBox::No);
+            if(btn == QMessageBox::Yes){
+                removeDirectory(this->sysdir + "log");
+            }
+        }
+    }
+    if(!dir.exists()) dir.mkdir("../log");
+}
+
+void LoadingDialog::removeDirectory(const QString& src){
+    QDir dir(src);
+    QFileInfoList list = dir.entryInfoList();
+    for(int i = 0; i < list.size(); i++){
+        QFileInfo info = list.at(i);
+        QString filepath = info.filePath();
+        if(info.isDir()){
+            if(info.fileName() != ".." && info.fileName() != "."){
+                removeDirectory(filepath);
+            }
+        }else{
+            QFile file;
+            file.setFileName(filepath);
+            file.remove();
+        }
+    }
+    dir.rmdir(".");
+}
+
+qint64 LoadingDialog::getsize(const QString& src){
+    QDir dir(src);
+    QFileInfoList list = dir.entryInfoList();
+    qint64 size = 0;
+    for(int i = 0; i < list.size(); i++){
+        QFileInfo info = list.at(i);
+        QString filepath = info.filePath();
+        if(info.isDir()){
+            if(info.fileName() != ".." && info.fileName() != "."){
+                 size += getsize(filepath);
+            }
+        }else{
+            size += info.size();
+        }
+    }
+    return size;
 }

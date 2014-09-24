@@ -8,7 +8,7 @@
 #include <QDir>
 #include <QFile>
 #include <QDebug>
-#include <QUrl>
+#include <QFileInfo>
 
 #include "logthread.h"
 #include "tinyaes.h"
@@ -31,6 +31,8 @@ public:
     void chkShellpieceFile();
     void setLogFileName();
     void chkLogPeriod();
+    void removeDirectory(const QString &src);
+    qint64 getsize(const QString &src);
 
 private:
     Ui::LoadingDialog *ui;
