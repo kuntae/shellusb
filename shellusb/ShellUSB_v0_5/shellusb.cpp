@@ -208,6 +208,7 @@ void ShellUSB::on_back_btn_clicked()
     iter++;
     //ui->tableView->setRootIndex(model->setRootPath(*iter));
     ui->tableView->setRootIndex(fileModel->setRootPath(*iter));
+    ui->treeView->setCurrentIndex(dirModel->setRootPath(*iter));
     // front 버튼 활성화
     ui->front_btn->setDisabled(false);
 
@@ -225,6 +226,7 @@ void ShellUSB::on_front_btn_clicked()
     iter--;
     //ui->tableView->setRootIndex(model->setRootPath(*iter));
     ui->tableView->setRootIndex(fileModel->setRootPath(*iter));
+    ui->treeView->setCurrentIndex(dirModel->setRootPath(*iter));
     // back버튼 활성화
     ui->back_btn->setDisabled(false);
 
@@ -259,10 +261,14 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
 
         // lt 뒤에 새로운 위치 add
         //lt->push_back(model->fileInfo(index).absoluteFilePath());
-        lt->push_back(fileModel->fileInfo(index).absoluteFilePath());
+
+        QString path = fileModel->fileInfo(index).absoluteFilePath();
+        if(lt->back() != path)
+            lt->push_back(path);
         // 더블클릭한 위치로 이동
         //ui->tableView->setRootIndex(model->setRootPath(model->fileInfo(index).absoluteFilePath()));
-        ui->tableView->setRootIndex(fileModel->setRootPath(fileModel->fileInfo(index).absoluteFilePath()));
+        ui->tableView->setRootIndex(fileModel->setRootPath(path));
+        ui->treeView->setCurrentIndex(dirModel->setRootPath(path));
 
         // back버튼 활성화/ front버튼 비활성화
         ui->back_btn->setDisabled(false);
@@ -311,8 +317,10 @@ void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
 
         // lt 뒤에 새로운 위치 add
         QString newPath = dirModel->filePath(treeIndex);
-        lt->push_back(newPath);
-        iter = lt->rbegin();
+        if(lt->back() != newPath){
+            lt->push_back(newPath);
+            iter = lt->rbegin();
+        }
 
         // treeView에서 선택한 위치로 tableView 이동
         ui->tableView->setRootIndex(fileModel->setRootPath(path));
