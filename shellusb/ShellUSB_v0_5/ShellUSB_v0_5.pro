@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     settingdialog.cpp \
     logthread.cpp \
     setup.cpp \
-    loadingdialog.cpp
+    loadingdialog.cpp \
+    helpdialog.cpp
 
 HEADERS  += mainwindow.h \
     encryptthread.h \
@@ -31,13 +32,15 @@ HEADERS  += mainwindow.h \
     settingdialog.h \
     logthread.h \
     setup.h \
-    loadingdialog.h
+    loadingdialog.h \
+    helpdialog.h
 
 FORMS    += mainwindow.ui \
     progdialog.ui \
     shellusb.ui \
     settingdialog.ui \
-    loadingdialog.ui
+    loadingdialog.ui \
+    helpdialog.ui
 
 RESOURCES += \
     img.qrc

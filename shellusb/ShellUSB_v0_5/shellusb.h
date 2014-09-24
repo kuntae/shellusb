@@ -5,6 +5,7 @@
 #include "tinyaes.h"
 #include "progdialog.h"
 #include "logthread.h"
+#include "helpdialog.h"
 
 #include <QDialog>
 #include <QtGui>
@@ -46,6 +47,8 @@ private slots:
 
 
     void on_tableView_customContextMenuRequested(const QPoint &pos);
+
+    void on_help_btn_clicked();
 
 private:
     TinyAES crypto;

@@ -387,3 +387,9 @@ void ShellUSB::on_tableView_customContextMenuRequested(const QPoint &pos)
         }
     }
 }
+
+void ShellUSB::on_help_btn_clicked()
+{
+    helpDialog *dialog = new helpDialog(this);
+    dialog->show();
+}
