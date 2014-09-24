@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QDebug>
+#include <QHash>
 
 class SetUp
 {
@@ -15,6 +16,7 @@ public:
     static int logFlag;
     static int period;
     static QString pwd;
+    static QHash<QString, QString> pwdlist;
     explicit SetUp();
     ~SetUp();
 };

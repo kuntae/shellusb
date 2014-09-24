@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QFileInfo>
+#include <QHash>
 
 #include "logthread.h"
 #include "tinyaes.h"
@@ -31,6 +32,7 @@ public:
     void chkShellpieceFile();
     void setLogFileName();
     void chkLogPeriod();
+    void makeHash();
     void removeDirectory(const QString &src);
     qint64 getsize(const QString &src);
 
@@ -42,6 +44,7 @@ private:
     const QString sysdirdec;
     const QString shellusb;
     const QString shellpiece;
+    const QString shellhash;
     QString::iterator iter;
 };
 

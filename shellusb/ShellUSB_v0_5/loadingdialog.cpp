@@ -5,7 +5,7 @@
 LoadingDialog::LoadingDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::LoadingDialog),
     sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiece.bin"),
-    sysdirenc("./shell/enc/"),sysdirdec("./shell/dec/")
+    sysdirenc("./shell/enc/"),sysdirdec("./shell/dec/"),shellhash("shellhash.bin")
 {
     ui->setupUi(this);
 
@@ -28,6 +28,7 @@ LoadingDialog::LoadingDialog(QWidget *parent) :
         this->setLogFileName();
         this->chkLogPeriod();
     }
+    this->makeHash();
     ui->text_label->setText("Welcome to ShellUSB...");
     //timer start. 1.5sec
     time.start(1500);
@@ -198,4 +199,46 @@ qint64 LoadingDialog::getsize(const QString& src){
         }
     }
     return size;
+}
+
+void LoadingDialog::makeHash(){
+    TinyAES crypto;
+    QByteArray datakey = crypto.HexStringToByte("1234");
+    QFile file;
+
+    file.setFileName(this->sysdir + this->shellhash);
+    file.open(QFile::ReadWrite|QFile::Text);
+
+    if(!file.setPermissions(QFile::ReadOwner)) qDebug()<<"false permi";
+    QTextStream out(&file);
+    out<<"key:value\n";
+    file.close();
+    file.open(QFile::ReadOnly|QFile::Text);
+    QString key;
+    QString value;
+    QString line;
+    QTextStream in( &file );
+    while (!in.atEnd()){
+        key.clear();
+        value.clear();
+        line = in.readLine();
+
+        iter = line.begin();
+        for(iter; iter != line.end(); iter++){
+            if(*iter == ':'){
+                iter++;
+                break;
+            }
+            key.append(*iter);
+        }
+
+        for(iter; iter != line.end(); iter++){
+            value.append(*iter);
+        }
+
+        SetUp::pwdlist.insert(key, value);
+    }
+    qDebug() << SetUp::pwdlist.value("key");
+    file.close();
+
 }

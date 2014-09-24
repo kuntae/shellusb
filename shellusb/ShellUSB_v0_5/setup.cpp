@@ -16,7 +16,7 @@ int SetUp::period;
 
 //password
 QString SetUp::pwd;
-
+QHash<QString, QString> SetUp::pwdlist;
 SetUp::SetUp()
 {
 
