@@ -22,7 +22,7 @@
 #include <vector>
 #include <QStyleFactory>
 #include <QTextCodec>
-
+#include <QMenu>
 
 namespace Ui {
 class ShellUSB;
@@ -45,6 +45,7 @@ private slots:
     void on_treeView_clicked(const QModelIndex &treeIndex);
 
 
+    void on_tableView_customContextMenuRequested(const QPoint &pos);
 
 private:
     TinyAES crypto;

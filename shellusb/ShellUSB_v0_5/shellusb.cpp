@@ -90,10 +90,12 @@ ShellUSB::ShellUSB(QWidget *parent) :
     QModelIndex index;
     dirModel = new QFileSystemModel(this);
     dirModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
-
     dirModel->setRootPath(SetUp::encUrl);
+
     lt->push_back(dirModel->rootPath());
+
     index = dirModel->index(SetUp::encUrl);
+
     ui->treeView->setModel(dirModel);
     ui->treeView->setColumnHidden(1,true);
     ui->treeView->setColumnHidden(2,true);
@@ -103,15 +105,20 @@ ShellUSB::ShellUSB(QWidget *parent) :
     fileModel = new QFileSystemModel(this);
     fileModel->setFilter(QDir::NoDotAndDotDot|QDir::AllEntries);
     fileModel->setRootPath(SetUp::encUrl);
+
     index = fileModel->index(SetUp::encUrl);
+
     ui->tableView->setModel(fileModel);
     ui->tableView->setRootIndex(index);
+
     ui->tableView->setAcceptDrops(true);
     ui->tableView->setDragEnabled(true);
     ui->tableView->setDropIndicatorShown(true);
     ui->tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->tableView->setDefaultDropAction(Qt::MoveAction);
     ui->tableView->setDragDropMode(QAbstractItemView::DragDrop);
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+
 }
 
 ShellUSB::~ShellUSB()
@@ -262,7 +269,7 @@ void ShellUSB::on_front_btn_clicked()
 void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
 {
     // 디렉토리를 더블클릭한 경우
-    if (model->fileInfo(index).isDir())
+    if (fileModel->fileInfo(index).isDir())
     {
         // iter 뒤에 있는 lt의 노드들을 삭제한다.
         int tmp = 0;
@@ -357,3 +364,26 @@ void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
 }
 
 
+void ShellUSB::on_tableView_customContextMenuRequested(const QPoint &pos)
+{
+    QModelIndex idx = ui->tableView->indexAt(pos);
+    QPoint globalPos = ui->tableView->viewport()->mapToGlobal(pos);
+
+    if(fileModel->fileInfo(idx).path().compare(".") == 0) return;
+    QMenu menu;
+    menu.addAction("Run");
+    menu.addAction("remove");
+
+    QAction* selectedItem = menu.exec(globalPos);
+
+    if(selectedItem){
+        QString select = selectedItem->text();
+        if(select.compare("Run") == 0){
+            qDebug() <<"Run";
+        }else if(select.compare("remove") == 0){
+            qDebug() <<"remove"<<fileModel->fileInfo(idx).absoluteFilePath();
+            QFile file(fileModel->fileInfo(idx).absoluteFilePath());
+            file.remove();
+        }
+    }
+}
