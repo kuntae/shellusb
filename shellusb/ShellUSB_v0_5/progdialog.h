@@ -2,7 +2,11 @@
 #define PROGDIALOG_H
 
 #include <QDialog>
+#include <QString>
+
 #include "encryptthread.h"
+#include "setup.h"
+#include "logthread.h"
 
 namespace Ui {
 class ProgDialog;
@@ -25,7 +29,7 @@ private slots:
 private:
     Ui::ProgDialog *ui;
     EncryptThread *encryptThread;
-
+    QString filename;
 signals:
 
 };

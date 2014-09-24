@@ -4,6 +4,7 @@
 #include "encryptthread.h"
 #include "tinyaes.h"
 #include "progdialog.h"
+#include "logthread.h"
 
 #include <QDialog>
 #include <QtGui>

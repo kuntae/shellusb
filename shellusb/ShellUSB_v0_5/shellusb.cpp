@@ -149,9 +149,18 @@ void ShellUSB::on_enc_btn_clicked()
     if (!ok)
     {
         qDebug() << "canceled";
+        if(SetUp::logFlag){
+            LogThread *log = new LogThread("CANCELED//Insert password.",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         return;
     }
-
+    if(SetUp::logFlag){
+        LogThread *log = new LogThread("WARNING//Encryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]",this);
+        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+        log->start();
+    }
     // ProgDialog 생성
     ProgDialog *progDialog = new ProgDialog(this);
     //progDialog->init(model->fileInfo(index).absoluteFilePath(), key, true);
@@ -189,7 +198,18 @@ void ShellUSB::on_dnc_btn_clicked()
     if (!ok)
     {
         qDebug() << "canceled";
+        if(SetUp::logFlag){
+            LogThread *log = new LogThread("CANCELED//Insert password.",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         return;
+    }
+
+    if(SetUp::logFlag){
+        LogThread *log = new LogThread("WARNING//Decryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]",this);
+        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+        log->start();
     }
 
     // ProgDialog 생성
@@ -281,6 +301,11 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
         QString localeStr = codec->toUnicode(fileModel->fileInfo(index).absoluteFilePath().toLatin1());
         QDesktopServices* ds = new QDesktopServices();
         ds->openUrl(QUrl(localeStr));
+        if(SetUp::logFlag){
+            LogThread *log = new LogThread("SUCCESSED//execute file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
     }
 }
 

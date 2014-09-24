@@ -12,11 +12,11 @@ void ProgDialog::init(QString filePath, QByteArray key, bool cryptFlag) {
     //qDebug() << "dialog: " << filePath << " " << key << " " << cryptFlag;
 
     int lastSlash = filePath.lastIndexOf("/");
-    QString fileName = filePath.mid(lastSlash + 1);
+    filename = filePath.mid(lastSlash + 1);
     if (cryptFlag)
-        this->setWindowTitle("<Encrypting> " + fileName);
+        this->setWindowTitle("<Encrypting> " + filename);
     else
-        this->setWindowTitle("<Decrypting> " + fileName);
+        this->setWindowTitle("<Decrypting> " + filename);
 
     // 암복호화 쓰레드 생성
     encryptThread = new EncryptThread(this);
@@ -48,4 +48,9 @@ void ProgDialog::on_cancel_clicked()
 {
     // QMutex를 사용해 쓰레드를 종료
     encryptThread->stop = true;
+    if(SetUp::logFlag){
+        LogThread *log = new LogThread("CANCELED//Encryption or Decryption file: [ " + this->filename + " ]",this);
+        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+        log->start();
+    }
 }
