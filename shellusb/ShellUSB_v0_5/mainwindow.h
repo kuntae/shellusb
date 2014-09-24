@@ -11,10 +11,10 @@
 #include <QPainter>
 #include <QTime>
 #include <QStyleFactory>
+#include <QShortcut>
 
 #include "shellusb.h"
 #include "settingdialog.h"
-
 #include "loadingdialog.h"
 #include "logthread.h"
 #include "setup.h"

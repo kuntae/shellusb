@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     load.setModal(true);
     load.exec();
 
-
     ui->setupUi(this);
     ui->password->setText("1234");
     inText = getString(6);
@@ -49,6 +48,11 @@ MainWindow::MainWindow(QWidget *parent) :
     qApp->setPalette(darkPalette);
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
     this->setWindowTitle("ShellUSB");
+    QShortcut *srtInsert = new QShortcut(QKeySequence(Qt::Key_Return), this);
+    connect(srtInsert, SIGNAL(activated()), this, SLOT(on_pushButton_clicked()));
+    QShortcut *srtEnter = new QShortcut(QKeySequence(Qt::Key_Enter), this);
+    connect(srtEnter, SIGNAL(activated()), this, SLOT(on_pushButton_clicked()));
+
 }
 
 MainWindow::~MainWindow()
