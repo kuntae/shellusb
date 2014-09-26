@@ -6,13 +6,12 @@
  * @param parent
  */
 ShellUSB::ShellUSB(QWidget *parent) :
-    QDialog(parent), ui(new Ui::ShellUSB), model(new QFileSystemModel(this)), lt(new std::list<QString>), iter(lt->rbegin())
+    QDialog(parent), ui(new Ui::ShellUSB), lt(new std::list<QString>), iter(lt->rbegin())
 {
     ui->setupUi(this);
 
     // 1. dark fusion 테마
     qApp->setStyle(QStyleFactory::create("Fusion"));
-
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, QColor(53,53,53));
     darkPalette.setColor(QPalette::WindowText, Qt::white);
@@ -25,73 +24,28 @@ ShellUSB::ShellUSB(QWidget *parent) :
     darkPalette.setColor(QPalette::ButtonText, Qt::white);
     darkPalette.setColor(QPalette::BrightText, Qt::red);
     darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-
     darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-
     qApp->setPalette(darkPalette);
-
     qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
     this->setWindowTitle("ShellUSB");
 
-    // 맨처음 경로 저장
-    //model->setRootPath(SetUp::encUrl);
-
-
     // 버튼 비활성화
     ui->front_btn->setDisabled(true); //if listFront !=NULL then front_btn enable else then front_btn disabled.
     ui->back_btn->setDisabled(true);
-
-//    model->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
-//    model->setReadOnly(true);
-    //model->setRootPath(SetUp::encUrl);
-
-    //ui->tableView->setModel(model);
-    qDebug() << SetUp::encUrl;
-
 
     // set icon images
     ui->back_btn->setIcon(QIcon(":/img/back.png"));
     ui->front_btn->setIcon(QIcon(":/img/front.png"));
     ui->help_btn->setIcon(QIcon(":/img/help.png"));
 
-
-
-//    // drag and drop part
-//    //ui->tableView->setRootIndex(model->setRootPath(SetUp::encUrl));
-//    //ui->tableView->setCurrentIndex(index);
-//    ui->tableView->setAcceptDrops(true);
-//    ui->tableView->setDragEnabled(true);
-//    ui->tableView->setDropIndicatorShown(true);
-//    ui->tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//    ui->tableView->setDefaultDropAction(Qt::MoveAction);
-//    ui->tableView->setDragDropMode(QAbstractItemView::DragDrop);
-
-//    // 왼쪽에 표시될 트리뷰(탐색기와 같은 효과)
-//    treeModel = new QDirModel(this);
-//    treeModel->setReadOnly(true);   // 폴더나 파일을 추가, 삭제 불가능하도록 설정
-//    treeModel->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name );    // 정렬
-
-//    // treeView에 프로그램이 실행된 Root 디렉토리를 표시
-
-//    QModelIndex index = treeModel->index(SetUp::encUrl);
-
-////    ui->treeView->setColumnHidden(1,true);
-////    ui->treeView->setColumnHidden(2,true);
-////    ui->treeView->setColumnHidden(3,true);
-//    //ui->treeView->setRootIndex(index);
-//    ui->treeView->setCurrentIndex(index);
-
-//    // treeView 이쁘게
-//    ui->treeView->expand(index);
-//    ui->treeView->scrollTo(index);
-//    ui->treeView->resizeColumnToContents(0);
     QModelIndex index;
     dirModel = new QFileSystemModel(this);
     dirModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
     dirModel->setRootPath(SetUp::encUrl);
 
+    // 맨처음 경로 저장
     lt->push_back(dirModel->rootPath());
 
     index = dirModel->index(SetUp::encUrl);
@@ -134,9 +88,6 @@ void ShellUSB::on_enc_btn_clicked()
     QModelIndex index = ui->tableView->currentIndex();
 
     // extract a file extension
-//    int lastDot = model->fileInfo(index).absoluteFilePath().lastIndexOf(".");
-//    QString duplicated = model->fileInfo(index).absoluteFilePath().mid(lastDot, 9);
-
     int lastDot = fileModel->fileInfo(index).absoluteFilePath().lastIndexOf(".");
     QString duplicated = fileModel->fileInfo(index).absoluteFilePath().mid(lastDot, 9);
 
@@ -170,7 +121,6 @@ void ShellUSB::on_enc_btn_clicked()
     }
     // ProgDialog 생성
     ProgDialog *progDialog = new ProgDialog(this);
-    //progDialog->init(model->fileInfo(index).absoluteFilePath(), key, true);
     progDialog->init(fileModel->fileInfo(index).absoluteFilePath(), key, true);
     progDialog->show();
 }
@@ -183,9 +133,6 @@ void ShellUSB::on_dnc_btn_clicked()
     QModelIndex index = ui->tableView->currentIndex();
 
     // extract a file extension
-//    int lastDot = model->fileInfo(index).absoluteFilePath().lastIndexOf(".");
-//    QString duplicated = model->fileInfo(index).absoluteFilePath().mid(lastDot, 9);
-
     int lastDot = fileModel->fileInfo(index).absoluteFilePath().lastIndexOf(".");
     QString duplicated = fileModel->fileInfo(index).absoluteFilePath().mid(lastDot, 9);
 
@@ -221,7 +168,6 @@ void ShellUSB::on_dnc_btn_clicked()
 
     // ProgDialog 생성
     ProgDialog *progDialog = new ProgDialog(this);
-    //progDialog->init(model->fileInfo(index).absoluteFilePath(), key, false);
     progDialog->init(fileModel->fileInfo(index).absoluteFilePath(), key, false);
     progDialog->show();
 }
@@ -233,7 +179,6 @@ void ShellUSB::on_back_btn_clicked()
 {
     // 뒤로 이동
     iter++;
-    //ui->tableView->setRootIndex(model->setRootPath(*iter));
     ui->tableView->setRootIndex(fileModel->setRootPath(*iter));
     ui->treeView->setCurrentIndex(dirModel->setRootPath(*iter));
     // front 버튼 활성화
@@ -251,7 +196,6 @@ void ShellUSB::on_front_btn_clicked()
 {
     // 앞으로 이동
     iter--;
-    //ui->tableView->setRootIndex(model->setRootPath(*iter));
     ui->tableView->setRootIndex(fileModel->setRootPath(*iter));
     ui->treeView->setCurrentIndex(dirModel->setRootPath(*iter));
     // back버튼 활성화
@@ -287,13 +231,10 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
             lt->pop_back();
 
         // lt 뒤에 새로운 위치 add
-        //lt->push_back(model->fileInfo(index).absoluteFilePath());
-
         QString path = fileModel->fileInfo(index).absoluteFilePath();
         if(lt->back() != path)
             lt->push_back(path);
         // 더블클릭한 위치로 이동
-        //ui->tableView->setRootIndex(model->setRootPath(model->fileInfo(index).absoluteFilePath()));
         ui->tableView->setRootIndex(fileModel->setRootPath(path));
         ui->treeView->setCurrentIndex(dirModel->setRootPath(path));
 

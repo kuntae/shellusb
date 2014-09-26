@@ -11,7 +11,6 @@ EncryptThread::EncryptThread(QObject *parent):
 }
 
 void EncryptThread::init(QString filePath, QByteArray key, bool cryptFlag) {
-    //qDebug() << "Thread: " << filePath << " " << key << " " << cryptFlag;
     this->filePath = filePath;
     this->key = key;
     this->cryptFlag = cryptFlag;
@@ -238,6 +237,5 @@ void EncryptThread::decrypt()
 
 void EncryptThread::cancelThread()
 {
-    qDebug() << "call";
     return;
 }

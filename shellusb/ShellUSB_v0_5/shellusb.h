@@ -54,8 +54,6 @@ private:
     TinyAES crypto;
     bool ok;
     Ui::ShellUSB *ui;
-    QFileSystemModel* model;
-    QDirModel *treeModel;       // treeView에 사용될 모델
     std::list<QString>* lt;
     std::list<QString>::reverse_iterator iter;
 
