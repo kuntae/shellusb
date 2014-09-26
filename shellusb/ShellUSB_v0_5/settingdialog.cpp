@@ -13,8 +13,6 @@ SettingDialog::SettingDialog(QWidget *parent) :
     ui->password->setText("1234");
     ui->password_2->setText("1234");
 
-    ui->file_system->setDisabled(true);
-
     // dark fusion 테마
     qApp->setStyle(QStyleFactory::create("Fusion"));
     QPalette darkPalette;
@@ -58,8 +56,8 @@ void SettingDialog::writeSysFile()
     out << "dec:" << this->decUrl + "\n";
     out << "#encrypt byte\n";
     out << "bit:" << this->encrypt + "\n";
-    out << "#language\n";
-    out << "lang:" << this->lang + "\n";
+    out << "#password auto\n";
+    out << "autopwd:" << this->pwdchk + "\n";
     out << "#writing log file\n";
     out << "flag:" << this->flag + "\n";
 
@@ -164,8 +162,11 @@ void SettingDialog::on_submit_btn_clicked()
     this->encUrl = ui->enc_url->text();
     this->decUrl = ui->dec_url->text();
 
-    //lenguage.
-    this->lang = ui->language->currentText();
+    //auto password.
+    if(ui->pwd_chk->isChecked())
+        this->pwdchk = "1";
+    else
+        this->pwdchk = "0";
 
     //encrypt byte & log flag.
     if (ui->aes_256->isChecked())

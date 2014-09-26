@@ -99,64 +99,68 @@ void ShellUSB::on_enc_btn_clicked()
 
         return;
     }
-
-    // input a key
-    QByteArray key = crypto.HexStringToByte
-            (QInputDialog::getText(NULL, "Locking", "Input a locking key",
-                                   QLineEdit::Password, NULL, &ok));
-
-    if (!ok)
-    {
-        qDebug() << "canceled";
-        if (SetUp::logFlag)
+    QByteArray key;
+    if(!SetUp::autopwd){
+        // input a key
+        key = crypto.HexStringToByte
+                (QInputDialog::getText(NULL, "Locking", "Input a locking key",
+                                    QLineEdit::Password, NULL, &ok));
+        if (!ok)
         {
-            LogThread *log = new LogThread("CANCELED//Insert password.",this);
-            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
-            log->start();
+            qDebug() << "canceled";
+            if (SetUp::logFlag)
+            {
+                LogThread *log = new LogThread("CANCELED//Insert password.",this);
+                connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+                log->start();
+            }
+
+            return;
         }
 
-        return;
-    }
-
-    QByteArray confirmKey = crypto.HexStringToByte
-            (QInputDialog::getText(NULL, "Locking", "Input a same locking key again",
-                                   QLineEdit::Password, NULL, &ok));
-
-    if (!ok)
-    {
-        qDebug() << "canceled";
-        if (SetUp::logFlag)
+        QByteArray confirmKey = crypto.HexStringToByte
+                (QInputDialog::getText(NULL, "Locking", "Input a same locking key again",
+                                       QLineEdit::Password, NULL, &ok));
+        if (!ok)
         {
-            LogThread *log = new LogThread("CANCELED//Insert password.",this);
-            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
-            log->start();
+            qDebug() << "canceled";
+            if (SetUp::logFlag)
+            {
+                LogThread *log = new LogThread("CANCELED//Insert password.",this);
+                connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+                log->start();
+            }
+
+            return;
         }
 
-        return;
+        // compare keys
+        if (strcmp(key, confirmKey))
+        {
+            qDebug() << "password is not passed";
+            QMessageBox::warning(NULL, "Warning", "Locking key is not same");
+            return;
+        }
+
+    }else{
+        key = crypto.HexStringToByte(SetUp::pwd);
     }
 
-    // compare keys
-    if (strcmp(key, confirmKey))
-    {
-        qDebug() << "password is not passed";
-        QMessageBox::warning(NULL, "Warning", "Locking key is not same");
-        return;
-    }
+
+
     // generate a list file
-    else
-    {
-        TinyAES crypto;
-        QByteArray encPwd = crypto.Encrypt(key, key);
-        QFile file;
-        QString fileName = fileModel->fileInfo(index).fileName();
-        file.setFileName("./shell/sys/list/" + fileName);
 
-        if (!file.open(QFile::WriteOnly))
-            qDebug() << __FILEW__  << " password file";
+    TinyAES crypto;
+    QByteArray encPwd = crypto.Encrypt(key, key);
+    QFile file;
+    QString fileName = fileModel->fileInfo(index).fileName();
+    file.setFileName("./shell/sys/list/" + fileName);
 
-        file.write(encPwd);
-        file.close();
-    }
+    if (!file.open(QFile::WriteOnly))
+        qDebug() << __FILEW__  << " password file";
+
+    file.write(encPwd);
+    file.close();
 
     if (SetUp::logFlag)
     {
@@ -191,24 +195,8 @@ void ShellUSB::on_dnc_btn_clicked()
         return;
     }
 
-    // input a key
-    QByteArray key = crypto.HexStringToByte
-            (QInputDialog::getText(NULL, "Unlocking", "Input a unlocking key", QLineEdit::Password, NULL, &ok));
-
-    if (!ok)
-    {
-        qDebug() << "canceled";
-        if (SetUp::logFlag)
-        {
-            LogThread *log = new LogThread("CANCELED//Insert password.",this);
-            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
-            log->start();
-        }
-
-        return;
-    }
-
     // read a key
+    QByteArray key;
     TinyAES crypto;
     QByteArray encPwd;
     QFile file;
@@ -221,23 +209,44 @@ void ShellUSB::on_dnc_btn_clicked()
     if (!file.open(QFile::ReadOnly))
         qDebug() <<  __FILEW__  << " password file";
 
-    QByteArray data = file.readAll();
+    if(!SetUp::autopwd){
+    // input a key
+        key = crypto.HexStringToByte
+                (QInputDialog::getText(NULL, "Unlocking", "Input a unlocking key", QLineEdit::Password, NULL, &ok));
 
-    file.close();
+        if (!ok)
+        {
+            qDebug() << "canceled";
+            if (SetUp::logFlag)
+            {
+                LogThread *log = new LogThread("CANCELED//Insert password.",this);
+                connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+                log->start();
+            }
 
-    QByteArray encKey = crypto.Decrypt(data, key);
+            return;
+        }
 
-    // compare keys
-    if (strcmp(key, encKey))
-    {
-        qDebug() << "password is not passed";
-        QMessageBox::warning(NULL, "Warning", "Locking key is not passed");
-        return;
+        QByteArray data = file.readAll();
+
+        file.close();
+
+        QByteArray encKey = crypto.Decrypt(data, key);
+
+        // compare keys
+        if (strcmp(key, encKey))
+        {
+            qDebug() << "password is not passed";
+            QMessageBox::warning(NULL, "Warning", "Locking key is not passed");
+            return;
+        }
+    }else{
+        key = crypto.HexStringToByte(SetUp::pwd);
     }
-    else
-    {
-        file.remove();
-    }
+
+
+    file.remove();
+
 
     if (SetUp::logFlag)
     {

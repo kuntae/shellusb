@@ -39,14 +39,14 @@
     <item>
      <widget class="QPushButton" name="enc_btn">
       <property name="text">
-       <string>Enc</string>
+       <string>암호화하기</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="dnc_btn">
       <property name="text">
-       <string>Dec</string>
+       <string>암호화풀기</string>
       </property>
      </widget>
     </item>
