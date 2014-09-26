@@ -390,5 +390,7 @@ void ShellUSB::on_tableView_customContextMenuRequested(const QPoint &pos)
 
 void ShellUSB::on_help_btn_clicked()
 {
-
+    helpDialog help;
+    help.setModal(true);
+    help.exec();
 }
