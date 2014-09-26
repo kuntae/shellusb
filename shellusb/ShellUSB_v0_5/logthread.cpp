@@ -21,6 +21,7 @@ void LogThread::run()
   file.open(QFile::ReadWrite|QFile::Append|QFile::Text);
   QTextStream st(&file);
   time = QTime::currentTime();
+  //시:분:초 형태로 저장.
   timeStr = QString("%1:%2:%3 ").arg(QString::number(time.hour()),
                                      QString::number(time.minute()),
                                      QString::number(time.second()));

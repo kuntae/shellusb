@@ -6,6 +6,7 @@
  */
 LoadingDialog::LoadingDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::LoadingDialog),
+    //const 변수들의 초기화.
     sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiece.bin"),
     sysdirenc("./shell/enc/"),sysdirdec("./shell/dec/")
 {
@@ -184,11 +185,11 @@ void LoadingDialog::chkLogPeriod()
     qint64 size = 0;
     QDir dir(this->sysdir+"log");
 
-    if (dir.exists() && SetUp::period != 0)
+    if (dir.exists() && SetUp::period != 0) //알림 사용유무 확인.
     {
         size = getsize(dir.path());
 
-        if (size >= SetUp::period * 1024 * 1024)
+        if (size >= SetUp::period * 1024 * 1024) // 용량계산
         {
             btn = QMessageBox::question(this, "Information","Log file is overflow "+
                                         QString::number(SetUp::period) + " MB.\n delete?",
