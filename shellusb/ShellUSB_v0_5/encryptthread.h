@@ -3,6 +3,7 @@
 
 #include "tinyaes.h"
 #include "setup.h"
+#include "logthread.h"
 
 #include <QThread>
 #include <QString>

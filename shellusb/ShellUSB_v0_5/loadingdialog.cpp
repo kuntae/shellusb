@@ -95,16 +95,16 @@ void LoadingDialog::chkShellusbFile()
     file.open(QFile::ReadOnly);
 
     // 설정파일의 유무 확인
-    while (!file.exists())
-    {
-        SettingDialog settingDialog;
-        settingDialog.setModal(true);
-        settingDialog.exec();
-
+    if(!file.exists()){
+        while (!file.exists())
+        {
+            SettingDialog settingDialog;
+            settingDialog.setModal(true);
+            settingDialog.exec();
+        }
+        file.open(QFile::ReadOnly);
     }
 
-    // file이 존재하지 않는다면 파일을 생성 후 다시 open
-    file.open(QFile::ReadOnly);
     QString key;
     QString value;
     QString line;
@@ -162,15 +162,16 @@ void LoadingDialog::chkShellpieceFile()
     file.open(QFile::ReadOnly);
 
     // 파일의 존재를 확인
-    while (!file.exists())
-    {
-        SettingDialog settingDialog;
-        settingDialog.setModal(true);
-        settingDialog.exec();
+    if(!file.exists()){
+        while (!file.exists())
+        {
+            SettingDialog settingDialog;
+            settingDialog.setModal(true);
+            settingDialog.exec();
+        }
+        file.open(QFile::ReadOnly);
     }
 
-    // file이 존재하지 않는다면 파일을 생성 후 다시 open
-    file.open(QFile::ReadOnly);
     QByteArray data = file.readAll();
     file.close();
 
