@@ -33,7 +33,6 @@ public:
 
 private slots:
     void on_login_btn_clicked();
-
     void on_refresh_btn_clicked();
 
 private:

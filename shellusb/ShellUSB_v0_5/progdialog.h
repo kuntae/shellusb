@@ -23,7 +23,6 @@ public:
 
 private slots:
     void updatePd(int);
-
     void on_cancel_clicked();
 
 private:

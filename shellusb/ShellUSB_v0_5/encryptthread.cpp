@@ -64,11 +64,23 @@ void EncryptThread::encrypt()
     // 소스 파일과 타겟 파일 열기
     if (!srcFile.open(QFile::ReadOnly))
     {
+        if (SetUp::logFlag)
+        {
+            LogThread *log = new LogThread("ERROR//File open fail. [ " + srcFile.fileName() + " ]",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         return;
     }
 
     if (!tgtFile.open(QFile::WriteOnly))
     {
+        if (SetUp::logFlag)
+        {
+            LogThread *log = new LogThread("ERROR//File open fail. [ " + tgtFile.fileName() + " ]",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         return;
     }
 
@@ -166,11 +178,23 @@ void EncryptThread::decrypt()
     // 소스 파일과 타겟 파일 열기
     if (!srcFile.open(QFile::ReadOnly))
     {
+        if (SetUp::logFlag)
+        {
+            LogThread *log = new LogThread("ERROR//File open fail. [ " + srcFile.fileName() + " ]",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         return;
     }
 
     if (!tgtFile.open(QFile::WriteOnly))
     {
+        if (SetUp::logFlag)
+        {
+            LogThread *log = new LogThread("ERROR//File open fail. [ " + tgtFile.fileName() + " ]",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         return;
     }
 
@@ -236,5 +260,11 @@ void EncryptThread::decrypt()
 // 쓰레드 취소
 void EncryptThread::cancelThread()
 {
+    if (SetUp::logFlag)
+    {
+        LogThread *log = new LogThread("CANCELED// THREAD CANCEL.",this);
+        connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+        log->start();
+    }
     return;
 }

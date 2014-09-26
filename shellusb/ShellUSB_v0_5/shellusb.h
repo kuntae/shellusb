@@ -44,10 +44,7 @@ private slots:
     void on_front_btn_clicked();
     void on_tableView_doubleClicked(const QModelIndex &index);
     void on_treeView_clicked(const QModelIndex &treeIndex);
-
-
     void on_tableView_customContextMenuRequested(const QPoint &pos);
-
     void on_help_btn_clicked();
 
 private:
@@ -56,7 +53,6 @@ private:
     Ui::ShellUSB *ui;
     std::list<QString>* lt;
     std::list<QString>::reverse_iterator iter;
-
     QFileSystemModel *dirModel;
     QFileSystemModel *fileModel;
 };

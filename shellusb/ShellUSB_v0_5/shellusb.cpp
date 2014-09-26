@@ -48,6 +48,7 @@ ShellUSB::ShellUSB(QWidget *parent) :
     // 맨처음 경로 저장
     lt->push_back(dirModel->rootPath());
 
+    //treeview 초기 설정.
     index = dirModel->index(SetUp::encUrl);
 
     ui->treeView->setModel(dirModel);
@@ -60,6 +61,7 @@ ShellUSB::ShellUSB(QWidget *parent) :
     fileModel->setFilter(QDir::NoDotAndDotDot|QDir::AllEntries);
     fileModel->setRootPath(SetUp::encUrl);
 
+    //tableview 초기 설정.
     index = fileModel->index(SetUp::encUrl);
 
     ui->tableView->setModel(fileModel);
@@ -95,7 +97,6 @@ void ShellUSB::on_enc_btn_clicked()
     if (!duplicated.compare(".ShellUSB"))
     {
         QMessageBox::warning(NULL, "Warning", "This file is already encrypted");
-
         return;
     }
 
@@ -146,7 +147,12 @@ void ShellUSB::on_enc_btn_clicked()
         if (strcmp(key, confirmKey))
         {
             QMessageBox::warning(NULL, "Warning", "Locking key is not same");
-
+            if (SetUp::logFlag)
+            {
+                LogThread *log = new LogThread("ERROR//Locking key is not same",this);
+                connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+                log->start();
+            }
             return;
         }
 
@@ -203,7 +209,6 @@ void ShellUSB::on_dnc_btn_clicked()
     if (duplicated.compare(".ShellUSB"))
     {
         QMessageBox::warning(NULL, "Warning", "This file is not encrypted");
-
         return;
     }
 
@@ -258,7 +263,12 @@ void ShellUSB::on_dnc_btn_clicked()
         if (strcmp(key, encKey))
         {
             QMessageBox::warning(NULL, "Warning", "Locking key is not passed");
-
+            if (SetUp::logFlag)
+            {
+                LogThread *log = new LogThread("ERROR//Locking key is not same",this);
+                connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+                log->start();
+            }
             return;
         }
     }
@@ -427,21 +437,25 @@ void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
     }
 }
 
-
+/**
+ * @brief tableview의 오른쪽 클릭에 대한 이벤트.
+ * @param pos: 마우스 이벤트가 발생한 위치.
+ */
 void ShellUSB::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
     QModelIndex idx = ui->tableView->indexAt(pos);
     QPoint globalPos = ui->tableView->viewport()->mapToGlobal(pos);
 
+    //배경에 마우스 포인터를 위치시키고 오른쪽 클릭을 했을때.
     if (fileModel->fileInfo(idx).path().compare(".") == 0)
         return;
 
-    // 메뉴 (실행, 삭제)
+    //메뉴 등록.
     QMenu menu;
     menu.addAction("Run");
     menu.addAction("remove");
 
-    // 메뉴 선택
+    //마우스의 위치에 menu를 실행시키고 선택한 값을 selectedItem에 저장.
     QAction* selectedItem = menu.exec(globalPos);
 
     if (selectedItem)
@@ -458,6 +472,12 @@ void ShellUSB::on_tableView_customContextMenuRequested(const QPoint &pos)
         {
             QFile file(fileModel->fileInfo(idx).absoluteFilePath());
             file.remove();
+            if (SetUp::logFlag)
+            {
+                LogThread *log = new LogThread("WARNING//delete file [ "+fileModel->fileInfo(idx).absoluteFilePath() + " ]",this);
+                connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+                log->start();
+            }
         }
     }
 }

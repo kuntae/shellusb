@@ -81,9 +81,9 @@ void SettingDialog::writePwdFile()
     file.setFileName("./shell/sys/shellpiece.bin");
 
     // 파일 오픈 실패 시
-    if (!file.open(QFile::WriteOnly))
+    if (!file.open(QFile::WriteOnly)){
         return;
-
+    }
     file.write(encPwd);
     file.close();
 }
