@@ -4,19 +4,17 @@ QString LogThread::logFileName;
 
 LogThread::LogThread( QString str, QObject *parent):QThread(parent), msg(str)
 {
-  //connect( this, SIGNAL(finished()), this, SLOT(deleteLater()) );
-    qDebug() << "log thread created.";
 }
 
 LogThread::~LogThread()
 {
-  qDebug()<<"die log thread.";
 }
-
+/**
+ * @brief thread 클래스의 run()함수를 오버로딩함.
+ * 파일의 뒤에 내용을 계속해서 추가함.
+ */
 void LogThread::run()
 {
-  qDebug()<<"runnig log thread.";
-  qDebug()<<logFileName;
   QString timeStr;
 
   file.setFileName(this->logFileName);
@@ -30,7 +28,10 @@ void LogThread::run()
   st << timeStr;
   file.close();
 }
-
+/**
+ * @brief 로그파일의 이름을 설정하는 Setter.
+ * @param str: 파일 이름.
+ */
 void LogThread::setLogFileName(QString str)
 {
   logFileName = str;
