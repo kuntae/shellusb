@@ -1,37 +1,48 @@
 #include "loadingdialog.h"
 #include "ui_loadingdialog.h"
 
-
+/**
+ * @brief LoadingDialog의 생성자.
+ */
 LoadingDialog::LoadingDialog(QWidget *parent) :
     QDialog(parent), ui(new Ui::LoadingDialog),
+    //const 변수들의 초기화.
     sysdir("./shell/sys/"),shellusb("shellusb.bin"),shellpiece("shellpiece.bin"),
     sysdirenc("./shell/enc/"),sysdirdec("./shell/dec/")
 {
     ui->setupUi(this);
-
+    //프로그램 로고 출력.
     ui->label->setPixmap(QPixmap(":/img/ShellUSB.png"));
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    // program logo default print time set.
+    //순간적으로 로고가 출력되는 현상을 방지하기 위한 sleep.
     connect(&time,SIGNAL(timeout()),this, SLOT(close()));
 
+    //기본 sys 디렉토리의 유무확인.
     ui->text_label->setText("check system diretory...");
     this->chkSysDirectory();
 
+    //설정 파일의 유무확인.
     ui->text_label->setText("check system file...");
     this->chkShellusbFile();
+
+    //비밀번호 파일의 유무확인.
     this->chkShellpieceFile();
+
+    //기본 sys 디렉토리에 log폴더를 생성하고, enc, dec 디렉토리 생성.
     ui->text_label->setText("check system diretory...");
     this->chkSysDirectory();
 
+    //로그를 사용하는지 확인. 사용한다면 로그파일의 이름을 설정한다.
     if (SetUp::logFlag)
     {
         ui->text_label->setText("check log file...");
         this->setLogFileName();
+        //로그파일이 저장된 디렉토리의 용량을 체크한다.
         this->chkLogPeriod();
     }
     ui->text_label->setText("Welcome to ShellUSB...");
-    //timer start. 1.5sec
+    //1.5 카운터를 시작.
     time.start(1500);
 }
 
@@ -40,7 +51,7 @@ LoadingDialog::~LoadingDialog()
     delete ui;
 }
 /**
- * @brief init logfile name. "yy_mm_dd.log"
+ * @brief 로그파일의 이름을 설정하는 함수. 그날의 날짜로 설정한다. [yy_mm_dd.log]
  */
 void LoadingDialog::setLogFileName()
 {
@@ -49,7 +60,7 @@ void LoadingDialog::setLogFileName()
         LogThread::logFileName = sysdir +"log/" + tmpdate;
 }
 /**
- * @brief check shell/sys directory and make it.
+ * @brief 디렉토리의 유무를 확인하고 없다면 만든다.
  */
 void LoadingDialog::chkSysDirectory()
 {
@@ -72,7 +83,7 @@ void LoadingDialog::chkSysDirectory()
     }
 }
 /**
- * @brief check system file. if don't exists, run Setting dialog.
+ * @brief 설정파일의 유무를 확인하는 함수. 설정파일이 없으면 SettingDialog를 호출한다.
  */
 void LoadingDialog::chkShellusbFile()
 {
@@ -80,7 +91,7 @@ void LoadingDialog::chkShellusbFile()
     file.setFileName(this->sysdir + this->shellusb);
     file.open(QFile::ReadOnly);
 
-    //check exists file.
+    //설정파일의 유무확인.
     while (!file.exists())
     {
         SettingDialog settingDialog;
@@ -96,6 +107,7 @@ void LoadingDialog::chkShellusbFile()
     QString line;
     QTextStream in(&file);
 
+    //파일의 내용을 한줄씩 읽고 ':'를 기준으로 왼쪽을 key, 오른쪽을 value로 저장하는 알고리즘.
     while (!in.atEnd())
     {
         key.clear();
@@ -123,6 +135,7 @@ void LoadingDialog::chkShellusbFile()
             value.append(*iter);
         }
 
+        //key의 값을 비교하여 해당되는 value를 SetUp 클래스의 정적변수에 저장.
         if(key == "enc") SetUp::encUrl = value;
         else if(key == "dec") SetUp::decUrl = value;
         else if(key == "bit") SetUp::bit = value.toInt();
@@ -134,17 +147,18 @@ void LoadingDialog::chkShellusbFile()
     file.close();
 }
 /**
- * @brief read and decrypt password file.
+ * @brief 비밀번호 파일의 유무를 확인. 없다면 SettingDialog를 호출. 있다면 복호화하여 SetUp 클래스의 정적변수 pwd에 저장.
  */
 void LoadingDialog::chkShellpieceFile()
 {
     TinyAES crypto;
+    //QString 를 QByteArray로 변환.
     QByteArray datakey = crypto.HexStringToByte("1234");
     QFile file;
     file.setFileName(this->sysdir + this->shellpiece);
     file.open(QFile::ReadOnly);
 
-    //check exists file.
+    //파일의 존재를 확인한다.
     while (!file.exists())
     {
         SettingDialog settingDialog;
@@ -162,7 +176,7 @@ void LoadingDialog::chkShellpieceFile()
 }
 
 /**
- * @brief check log file. if log file name is delete name than delete file.
+ * @brief 로그파일이 저장된 디렉토리를 확인하고 초기 설정한 용량을 넘는다면 알림을 주고 삭제 여부를 물어본다.
  * 
  */
 void LoadingDialog::chkLogPeriod()
@@ -171,11 +185,11 @@ void LoadingDialog::chkLogPeriod()
     qint64 size = 0;
     QDir dir(this->sysdir+"log");
 
-    if (dir.exists() && SetUp::period != 0)
+    if (dir.exists() && SetUp::period != 0) //알림 사용유무 확인.
     {
         size = getsize(dir.path());
 
-        if (size >= SetUp::period * 1024 * 1024)
+        if (size >= SetUp::period * 1024 * 1024) // 용량계산
         {
             btn = QMessageBox::question(this, "Information","Log file is overflow "+
                                         QString::number(SetUp::period) + " MB.\n delete?",
@@ -191,6 +205,7 @@ void LoadingDialog::chkLogPeriod()
         dir.mkdir("../log");
 }
 
+//디렉토리의 내용을 지우는 재귀함수.
 void LoadingDialog::removeDirectory(const QString& src)
 {
     QDir dir(src);
@@ -219,6 +234,7 @@ void LoadingDialog::removeDirectory(const QString& src)
     dir.rmdir(".");
 }
 
+//디렉토리안에 있는 내용들의 전체 사이즈를 구해오는 재귀함수.
 qint64 LoadingDialog::getsize(const QString& src)
 {
     QDir dir(src);

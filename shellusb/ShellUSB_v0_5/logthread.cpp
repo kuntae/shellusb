@@ -9,7 +9,10 @@ LogThread::LogThread( QString str, QObject *parent):QThread(parent), msg(str)
 LogThread::~LogThread()
 {
 }
-
+/**
+ * @brief thread 클래스의 run()함수를 오버로딩함.
+ * 파일의 뒤에 내용을 계속해서 추가함.
+ */
 void LogThread::run()
 {
   QString timeStr;
@@ -18,6 +21,7 @@ void LogThread::run()
   file.open(QFile::ReadWrite|QFile::Append|QFile::Text);
   QTextStream st(&file);
   time = QTime::currentTime();
+  //시:분:초 형태로 저장.
   timeStr = QString("%1:%2:%3 ").arg(QString::number(time.hour()),
                                      QString::number(time.minute()),
                                      QString::number(time.second()));
@@ -25,7 +29,10 @@ void LogThread::run()
   st << timeStr;
   file.close();
 }
-
+/**
+ * @brief 로그파일의 이름을 설정하는 Setter.
+ * @param str: 파일 이름.
+ */
 void LogThread::setLogFileName(QString str)
 {
   logFileName = str;
