@@ -53,7 +53,7 @@ TinyAES::TinyAES()
 {
 }
 
-// encryption with IV
+// encryption with iv
 QByteArray TinyAES::Encrypt(QByteArray p_input, QByteArray p_key)
 {
     QByteArray iv = QUuid::createUuid().toRfc4122();
