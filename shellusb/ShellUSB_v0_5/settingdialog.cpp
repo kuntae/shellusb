@@ -42,51 +42,6 @@ SettingDialog::~SettingDialog()
 }
 
 /**
- * @brief 확인 버튼 클릭 시 이벤트 처리 함수
- */
-void SettingDialog::on_pushButton_3_clicked()
-{
-    //password check.
-    this->firstPwd = ui->password->text();
-    this->secondPwd = ui->password_2->text();
-
-    if(this->firstPwd != this->secondPwd || (this->firstPwd.isEmpty() || this->secondPwd.isEmpty())){
-        qDebug() << "no match";
-        QMessageBox::warning(this, "Warning","NO MATCH PASSWORD.");
-        emit(noMatchPwd());
-        return;
-    }
-    //directory path.
-    this->encUrl = ui->enc_url->text();
-    this->decUrl = ui->dec_url->text();
-
-    //lenguage.
-    this->lang = ui->language->currentText();
-
-    //encrypt byte & log flag.
-    if(ui->aes_256->isChecked()){
-        this->encrypt = "256";
-    }else{
-        this->encrypt = "128";
-    }
-
-    if(ui->log_use->isChecked()){
-        this->flag = "1";
-        if(ui->log_period->currentText().compare("No Notice")==0)
-            this->period = "0";
-        else
-            this->period = ui->log_period->currentText();
-    }else{
-        this->flag = "0";
-    }
-
-    this->writeSysFile();
-    this->writePwdFile();
-
-    emit(close());
-}
-
-/**
  * @brief shellusb.bin에 필요한 설정 내용을 저장
  */
 void SettingDialog::writeSysFile(){
@@ -141,7 +96,7 @@ void SettingDialog::on_log_not_use_clicked()
 /**
  * @brief enc_url 경로를 수정하는 이벤트 처리 함수
  */
-void SettingDialog::on_pushButton_clicked()
+void SettingDialog::on_encpath_btn_clicked()
 {
     QFileDialog dialog(this);
     QString path = ui->enc_url->text();
@@ -153,12 +108,12 @@ void SettingDialog::on_pushButton_clicked()
     if(dirPath.size() > 0) {
         ui->enc_url->setText(dirPath);
     }
-}
 
+}
 /**
  * @brief dec_url 경로를 수정하는 이벤트 처리 함수
  */
-void SettingDialog::on_pushButton_2_clicked()
+void SettingDialog::on_decpath_btn_clicked()
 {
     QFileDialog dialog(this);
     QString path = ui->dec_url->text();
@@ -170,4 +125,49 @@ void SettingDialog::on_pushButton_2_clicked()
     if(dirPath.size() > 0) {
         ui->dec_url->setText(dirPath);
     }
+}
+
+/**
+ * @brief 확인 버튼 클릭 시 이벤트 처리 함수
+ */
+void SettingDialog::on_submit_btn_clicked()
+{
+    //password check.
+    this->firstPwd = ui->password->text();
+    this->secondPwd = ui->password_2->text();
+
+    if(this->firstPwd != this->secondPwd || (this->firstPwd.isEmpty() || this->secondPwd.isEmpty())){
+        qDebug() << "no match";
+        QMessageBox::warning(this, "Warning","NO MATCH PASSWORD.");
+        emit(noMatchPwd());
+        return;
+    }
+    //directory path.
+    this->encUrl = ui->enc_url->text();
+    this->decUrl = ui->dec_url->text();
+
+    //lenguage.
+    this->lang = ui->language->currentText();
+
+    //encrypt byte & log flag.
+    if(ui->aes_256->isChecked()){
+        this->encrypt = "256";
+    }else{
+        this->encrypt = "128";
+    }
+
+    if(ui->log_use->isChecked()){
+        this->flag = "1";
+        if(ui->log_period->currentText().compare("No Notice")==0)
+            this->period = "0";
+        else
+            this->period = ui->log_period->currentText();
+    }else{
+        this->flag = "0";
+    }
+
+    this->writeSysFile();
+    this->writePwdFile();
+
+    emit(close());
 }

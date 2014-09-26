@@ -22,11 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
     failCnt = 0;
 
     //보안문자 숨기기
-    ui->label->setVisible(false);
-    ui->label->hide();
+    ui->cacha_label->setVisible(false);
+    ui->cacha_label->hide();
     ui->lineEdit->hide();
-    ui->pushButton_2->hide();
-    ui->pushButton->setGeometry(110, 75, 81, 23);
+    ui->refresh_btn->hide();
+    ui->login_btn->setGeometry(110, 75, 81, 23);
     this->setFixedSize(287, 121);
 
     // dark fusion 테마
@@ -95,7 +95,6 @@ QPixmap MainWindow::makeImg(QString inText){
     painter.setFont(QFont("Arial",45));
     painter.drawText(15,90,inText);
 
-    //ui->label->setPixmap(pixmap);
     return pixmap;
 }
 
@@ -133,13 +132,13 @@ void MainWindow::distortImg(QPixmap pixmap)
             }
         }
     }
-    ui->label->setPixmap(pixmap2);
+    ui->cacha_label->setPixmap(pixmap2);
 }
 
 /**
  * @brief 로그인 버튼 클릭 시 이벤트 처리 함수
  */
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_login_btn_clicked()
 {
     QString passWord;
 
@@ -149,11 +148,11 @@ void MainWindow::on_pushButton_clicked()
     if (!passWord.compare(SetUp::pwd))
     {
         // Catcha가 틀린 경우
-        if(failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0) {           
+        if(failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0) {
             inText = getString(6);
             distortImg(makeImg(inText));
             ui->password->setText("");
-            ui->label_2->setText("Catcha Fail ");
+            ui->msg_label->setText("Password Fail or Security word Fail.");
             if(SetUp::logFlag){
                 LogThread *log = new LogThread("WARNING//Security String no match",this);
                 connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
@@ -173,18 +172,18 @@ void MainWindow::on_pushButton_clicked()
     }
     // 패스워드가 틀린 경우
     else {
-        ui->label_2->setText("Password Fail ");
+        ui->msg_label->setText("Password Fail ");
         ui->password->setText("");
         failCnt++;
 
         if(failCnt >= 3) {
             inText = getString(6);
             distortImg(makeImg(inText));
-            ui->label->setVisible(true);
-            ui->label->show();
+            ui->cacha_label->setVisible(true);
+            ui->cacha_label->show();
             ui->lineEdit->show();
-            ui->pushButton_2->show();
-            ui->pushButton->setGeometry(110, 180, 81, 23);
+            ui->refresh_btn->show();
+            ui->login_btn->setGeometry(110, 180, 81, 23);
             this->setFixedSize(287, 237);
         }
         if(SetUp::logFlag){
@@ -193,15 +192,14 @@ void MainWindow::on_pushButton_clicked()
             log->start();
         }
     }
+
 }
 
 /**
  * @brief Refresh 버튼 클릭 시 이벤트 처리 함수
  */
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_refresh_btn_clicked()
 {
     inText = getString(6);
     distortImg(makeImg(inText));
 }
-
-

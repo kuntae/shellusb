@@ -59,7 +59,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="encpath_btn">
    <property name="geometry">
     <rect>
      <x>339</x>
@@ -72,7 +72,7 @@
     <string>변경</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="decpath_btn">
    <property name="geometry">
     <rect>
      <x>339</x>
@@ -301,7 +301,7 @@
     <string>파일시스템</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="submit_btn">
    <property name="geometry">
     <rect>
      <x>309</x>

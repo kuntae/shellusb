@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="login_btn">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -50,7 +50,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="cacha_label">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -63,7 +63,7 @@
      <string>Label</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="refresh_btn">
     <property name="geometry">
      <rect>
       <x>200</x>
@@ -76,7 +76,7 @@
      <string>Refresh</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="msg_label">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -86,7 +86,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
     </property>
    </widget>
   </widget>

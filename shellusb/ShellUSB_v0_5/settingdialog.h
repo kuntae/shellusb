@@ -26,15 +26,15 @@ public:
     void writePwdFile();
 
 private slots:
-    void on_pushButton_3_clicked();
-
     void on_log_use_clicked();
 
     void on_log_not_use_clicked();
 
-    void on_pushButton_clicked();
+    void on_encpath_btn_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_decpath_btn_clicked();
+
+    void on_submit_btn_clicked();
 
 signals:
     void noMatchPwd();
