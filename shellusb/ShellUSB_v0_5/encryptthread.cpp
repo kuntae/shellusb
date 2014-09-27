@@ -10,7 +10,9 @@ EncryptThread::EncryptThread(QObject *parent):
     this->stop = false;
 }
 
-void EncryptThread::init(QString filePath, QByteArray key, bool cryptFlag) {
+// 파일 경로, 키, 플래그 저장
+void EncryptThread::init(QString filePath, QByteArray key, bool cryptFlag)
+{
     this->filePath = filePath;
     this->key = key;
     this->cryptFlag = cryptFlag;
@@ -21,6 +23,7 @@ EncryptThread::~EncryptThread()
     qDebug() << "Thread die";
 }
 
+// 함수 호출로 run 메소드 실행
 void EncryptThread::run()
 {
     if (this->cryptFlag)
@@ -32,13 +35,13 @@ void EncryptThread::run()
 void EncryptThread::encrypt()
 {
     QMutex mutex;
-    const int size = SetUp::bit;
+    const int size = SetUp::bit; // 설정한 bit로 암호화
 
-    // set a source file path
+    // 소스 파일 경로 설정
     QString srcPath = this->filePath;
     QFile srcFile(srcPath);
 
-    // set a target file path
+    // 타겟 파일 경로 설정
     QString tgtPath;
 
     // encUrl이 유효하면 encUrl을 사용
@@ -53,13 +56,14 @@ void EncryptThread::encrypt()
         tgtPath = srcPath;
     }
 
+    // 확장자 추가
     tgtPath = tgtPath + ".ShellUSB";
     QFile tgtFile(tgtPath);
 
-    // set a key
+    // 키 설정
     QByteArray key = this->key;
 
-    // open a source file and target file
+    // 소스 파일과 타겟 파일 열기
     if (!srcFile.open(QFile::ReadOnly))
     {
         qDebug() << "Could not open a read file";
@@ -72,7 +76,7 @@ void EncryptThread::encrypt()
         return;
     }
 
-    // set a buffer fixed size(128byte)
+    // 버퍼를 128byte 크기로 설정
     QByteArray buffer;
     buffer.resize(size);
 
@@ -83,9 +87,10 @@ void EncryptThread::encrypt()
     int onePercentSize = srcFile.size() / 100;
     int finalSize = onePercentSize;
 
-    // read a source file and write a target file encrypted datas
+    // 소스 파일을 읽은 후 암호화하여 타겟 파일에 저장
     while (!srcFile.atEnd())
     {
+        // critical section
         mutex.lock();
         if (this->stop)
         {
@@ -97,7 +102,7 @@ void EncryptThread::encrypt()
         encrypted = crypto.Encrypt(buffer, key);
         tgtFile.write(encrypted);
 
-        // update a progressbar
+        // progressbar 업데이트
         presentSize += buffer.size();
 
         if (presentSize > finalSize)
@@ -109,23 +114,23 @@ void EncryptThread::encrypt()
         emit sinalUpdate(count);
     }
 
-    // close and remove a source file
+    // 소스 파일 닫기
     srcFile.close();
 
-    // flush and close a target file
+    // 타겟 파일 닫기
     tgtFile.flush();
     tgtFile.close();
 
     // 비정상적으로 종료된 경우
     if (this->stop)
     {
-        // target file을 삭제
+        // 타겟 파일을 삭제
         tgtFile.remove();
     }
     // 정상적으로 종료된 경우
     else
     {
-        // source file을 삭제
+        // 소스 파일을 삭제
         srcFile.remove();
     }
 }
@@ -133,13 +138,13 @@ void EncryptThread::encrypt()
 void EncryptThread::decrypt()
 {
     QMutex mutex;
-    const int size = SetUp::bit + 32;
+    const int size = SetUp::bit + 32; // 설정한 bit로 암호화
 
-    // set a source file path
+    // 소스 파일 경로 설정
     QString srcPath = this->filePath;
     QFile srcFile(srcPath);
 
-    // set a target file path
+    // 타겟 파일 경로 설정
     QString tgtPath;
 
     // decUrl이 유효하면 decUrl을 사용
@@ -161,10 +166,10 @@ void EncryptThread::decrypt()
 
     QFile tgtFile(tgtPath);
 
-    // set a key
+    // 키 설정
     QByteArray key = this->key;
 
-    // open a source file and target file
+    // 소스 파일과 타겟 파일 열기
     if (!srcFile.open(QFile::ReadOnly))
     {
         qDebug() << "Could not open a read file";
@@ -177,7 +182,7 @@ void EncryptThread::decrypt()
         return;
     }
 
-    // set a buffer fixed size(160byte)
+    // 버퍼를 128 + 32 = 160byte 크기로 설정
     QByteArray buffer;
     buffer.resize(size);
 
@@ -188,9 +193,10 @@ void EncryptThread::decrypt()
     int onePercentSize = srcFile.size() / 100;
     int finalSize = onePercentSize;
 
-    // read a source file and write a target file decrypted datas
+    // 소스 파일을 읽은 후 복호화하여 타겟 파일에 저장
     while (!srcFile.atEnd())
     {
+        // critical section
         mutex.lock();
         if (this->stop)
         {
@@ -202,7 +208,7 @@ void EncryptThread::decrypt()
         decrypted = crypto.Decrypt(buffer, key);
         tgtFile.write(decrypted);
 
-        // update a progressbar
+        // progressbar 업데이트
         presentSize += buffer.size();
 
         if (presentSize > finalSize)
@@ -214,27 +220,28 @@ void EncryptThread::decrypt()
         emit sinalUpdate(count);
     }
 
-    // close and remove a source file
+    // 소스 파일 닫기
     srcFile.close();
 
-    // flush and close a target file
+    // 타겟 파일 닫기
     tgtFile.flush();
     tgtFile.close();
 
     // 비정상적으로 종료된 경우
     if (this->stop)
     {
-        // target file을 삭제
+        // 타겟 파일을 삭제
         tgtFile.remove();
     }
     // 정상적으로 종료된 경우
     else
     {
-        // source file을 삭제
+        // 소스 파일을 삭제
         srcFile.remove();
     }
 }
 
+// 쓰레드 취소
 void EncryptThread::cancelThread()
 {
     return;

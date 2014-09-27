@@ -87,11 +87,11 @@ void ShellUSB::on_enc_btn_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
 
-    // extract a file extension
+    // 파일 확장자 얻어 오기
     int lastDot = fileModel->fileInfo(index).absoluteFilePath().lastIndexOf(".");
     QString duplicated = fileModel->fileInfo(index).absoluteFilePath().mid(lastDot, 9);
 
-    // inspect whether file name is duplicated
+    // 중복 여부 검사
     if (!duplicated.compare(".ShellUSB"))
     {
         QMessageBox::warning(NULL, "Warning", "This file is already encrypted");
@@ -100,11 +100,12 @@ void ShellUSB::on_enc_btn_clicked()
         return;
     }
 
-    // input a key
+    // 키 입력
     QByteArray key = crypto.HexStringToByte
             (QInputDialog::getText(NULL, "Locking", "Input a locking key",
                                    QLineEdit::Password, NULL, &ok));
 
+    // ok 버튼 눌렀는지 검사
     if (!ok)
     {
         qDebug() << "canceled";
@@ -118,10 +119,12 @@ void ShellUSB::on_enc_btn_clicked()
         return;
     }
 
+    // 확인 키 입력
     QByteArray confirmKey = crypto.HexStringToByte
             (QInputDialog::getText(NULL, "Locking", "Input a same locking key again",
                                    QLineEdit::Password, NULL, &ok));
 
+    // ok 버튼 눌렀는지 검사
     if (!ok)
     {
         qDebug() << "canceled";
@@ -135,14 +138,15 @@ void ShellUSB::on_enc_btn_clicked()
         return;
     }
 
-    // compare keys
+    // 키 같은지 확인
+    // 틀리면 경고창
     if (strcmp(key, confirmKey))
     {
         qDebug() << "password is not passed";
         QMessageBox::warning(NULL, "Warning", "Locking key is not same");
         return;
     }
-    // generate a list file
+    // 같으면 키 암호화하여 파일에 저장하고 진행
     else
     {
         TinyAES crypto;
@@ -178,11 +182,11 @@ void ShellUSB::on_dnc_btn_clicked()
 {
     QModelIndex index = ui->tableView->currentIndex();
 
-    // extract a file extension
+    // 파일 확장자 얻어 오기
     int lastDot = fileModel->fileInfo(index).absoluteFilePath().lastIndexOf(".");
     QString duplicated = fileModel->fileInfo(index).absoluteFilePath().mid(lastDot, 9);
 
-    // inspect whether file name is duplicated
+    // 중복 여부 검사
     if (duplicated.compare(".ShellUSB"))
     {
         QMessageBox::warning(NULL, "Warning", "This file is not encrypted");
@@ -191,10 +195,11 @@ void ShellUSB::on_dnc_btn_clicked()
         return;
     }
 
-    // input a key
+    // 키 입력
     QByteArray key = crypto.HexStringToByte
             (QInputDialog::getText(NULL, "Unlocking", "Input a unlocking key", QLineEdit::Password, NULL, &ok));
 
+    // ok 버튼 눌렀는지 검사
     if (!ok)
     {
         qDebug() << "canceled";
@@ -208,7 +213,7 @@ void ShellUSB::on_dnc_btn_clicked()
         return;
     }
 
-    // read a key
+    // 파일을 복호화하여 키 읽기
     TinyAES crypto;
     QByteArray encPwd;
     QFile file;
@@ -227,13 +232,15 @@ void ShellUSB::on_dnc_btn_clicked()
 
     QByteArray encKey = crypto.Decrypt(data, key);
 
-    // compare keys
+    // 키 같은지 확인
+    // 틀리면 경고창
     if (strcmp(key, encKey))
     {
         qDebug() << "password is not passed";
         QMessageBox::warning(NULL, "Warning", "Locking key is not passed");
         return;
     }
+    // 같으면 파일 삭제하고 진행
     else
     {
         file.remove();
@@ -261,6 +268,7 @@ void ShellUSB::on_back_btn_clicked()
     iter++;
     ui->tableView->setRootIndex(fileModel->setRootPath(*iter));
     ui->treeView->setCurrentIndex(dirModel->setRootPath(*iter));
+
     // front 버튼 활성화
     ui->front_btn->setDisabled(false);
 

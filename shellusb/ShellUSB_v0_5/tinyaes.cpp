@@ -60,6 +60,7 @@ QByteArray TinyAES::Encrypt(QByteArray p_input, QByteArray p_key)
     QByteArray iv = QUuid::createUuid().toRfc4122();
     QByteArray input = p_input.prepend(iv);
 
+    // 키 크기를 32로 늘림
     if (p_key.size() != 32)
     {
         while (p_key.size() != 32)
@@ -76,6 +77,7 @@ QByteArray TinyAES::Decrypt(QByteArray p_input, QByteArray p_key)
     QByteArray iv = p_input.left(16);
     QByteArray input = p_input.remove(0, 16);
 
+    // 키 크기를 32로 늘림
     if (p_key.size() != 32)
     {
         while (p_key.size() != 32)

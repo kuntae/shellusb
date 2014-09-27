@@ -1,0 +1,11 @@
+#directory of enc & dec
+enc:./shell/enc
+dec:./shell/dec
+#encrypt byte
+bit:128
+#language
+lang:Korean
+#writing log file
+flag:1
+#delete of log file
+period:1
