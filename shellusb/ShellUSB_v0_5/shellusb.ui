@@ -117,6 +117,32 @@
     </rect>
    </property>
   </widget>
+  <widget class="QPushButton" name="encurl_btn">
+   <property name="geometry">
+    <rect>
+     <x>159</x>
+     <y>30</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>암호화한 곳</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="dncurl_btn">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>30</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>암호화 푼 곳</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

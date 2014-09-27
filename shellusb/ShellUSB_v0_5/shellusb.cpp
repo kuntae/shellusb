@@ -226,8 +226,15 @@ void ShellUSB::on_dnc_btn_clicked()
     file.setFileName("./shell/sys/list/" + fileName);
 
     // 파일 오픈 실패 시
-    if (!file.open(QFile::ReadOnly))
+    if (!file.open(QFile::ReadOnly)){
+        if (SetUp::logFlag)
+        {
+            LogThread *log = new LogThread("ERROR//File open fail. [ "+ file.fileName() + " ]",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
         return;
+    }
 
     // 오토 키 여부 검사
     // 오토 키가 아니라면
@@ -339,28 +346,9 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
     // 디렉토리를 더블클릭한 경우
     if (fileModel->fileInfo(index).isDir())
     {
-        // iter 뒤에 있는 lt의 노드들을 삭제한다.
-        int tmp = 0;
-        std::list<QString>::reverse_iterator it = lt->rbegin();
-
-        while (it != lt->rend())
-        {
-            if(it == iter)
-                break;
-            else
-                tmp++;
-            it++;
-        }
-
-        for (int i = 0; i < tmp; i++)
-            lt->pop_back();
-
-        // lt 뒤에 새로운 위치 add
         QString path = fileModel->fileInfo(index).absoluteFilePath();
 
-        if (lt->back() != path)
-            lt->push_back(path);
-
+        this->modifyList(path);
         // 더블클릭한 위치로 이동
         ui->tableView->setRootIndex(fileModel->setRootPath(path));
         ui->treeView->setCurrentIndex(dirModel->setRootPath(path));
@@ -400,33 +388,9 @@ void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
     // 디렉토리 일 경우
     if (pathInfo.isDir())
     {
-        // iter뒤에 있는 lt의 노드들을 삭제한다.
-        int tmp = 0;
-        std::list<QString>::reverse_iterator it = lt->rbegin();
-
-        while (it != lt->rend())
-        {
-            if (it == iter)
-                break;
-            else
-                tmp++;
-            it++;
-        }
-
-        for (int i = 0; i < tmp; i++)
-        {
-            lt->pop_back();
-        }
-
-        // lt 뒤에 새로운 위치 add
         QString newPath = dirModel->filePath(treeIndex);
 
-        // lt 뒤가 새로운 경로가 아니라면
-        if (lt->back() != newPath)
-        {
-            lt->push_back(newPath);
-            iter = lt->rbegin();
-        }
+        this->modifyList(newPath);
 
         // treeView에서 선택한 위치로 tableView 이동
         ui->tableView->setRootIndex(fileModel->setRootPath(path));
@@ -488,4 +452,60 @@ void ShellUSB::on_help_btn_clicked()
     helpDialog help;
     help.setModal(true);
     help.exec();
+}
+
+void ShellUSB::on_encurl_btn_clicked()
+{
+    QModelIndex idx;
+    idx = this->fileModel->setRootPath(SetUp::encUrl);
+    ui->tableView->setRootIndex(idx);
+    idx = this->dirModel->setRootPath(SetUp::encUrl);
+    ui->treeView->setCurrentIndex(idx);
+
+    this->modifyList(SetUp::encUrl);
+
+    // back버튼 활성화/ front버튼 비활성화
+    ui->back_btn->setDisabled(false);
+    ui->front_btn->setDisabled(true);
+}
+
+void ShellUSB::on_dncurl_btn_clicked()
+{
+    QModelIndex idx;
+    idx = this->fileModel->setRootPath(SetUp::decUrl);
+    ui->tableView->setRootIndex(idx);
+    idx = this->dirModel->setRootPath(SetUp::decUrl);
+    ui->treeView->setCurrentIndex(idx);
+
+    this->modifyList(SetUp::decUrl);
+
+    // back버튼 활성화/ front버튼 비활성화
+    ui->back_btn->setDisabled(false);
+    ui->front_btn->setDisabled(true);
+}
+
+void ShellUSB::modifyList(const QString path){
+    int tmp = 0;
+    std::list<QString>::reverse_iterator it = lt->rbegin();
+
+    while (it != lt->rend())
+    {
+        if (it == iter)
+            break;
+        else
+            tmp++;
+        it++;
+    }
+
+    for (int i = 0; i < tmp; i++)
+    {
+        lt->pop_back();
+    }
+
+    // lt 뒤가 새로운 경로가 아니라면
+    if (lt->back() != path)
+    {
+        lt->push_back(path);
+        iter = lt->rbegin();
+    }
 }

@@ -35,6 +35,7 @@ class ShellUSB : public QDialog
 
 public:
     explicit ShellUSB(QWidget *parent = 0);
+    void modifyList(const QString path);
     ~ShellUSB();
 
 private slots:
@@ -46,6 +47,8 @@ private slots:
     void on_treeView_clicked(const QModelIndex &treeIndex);
     void on_tableView_customContextMenuRequested(const QPoint &pos);
     void on_help_btn_clicked();
+    void on_encurl_btn_clicked();
+    void on_dncurl_btn_clicked();
 
 private:
     TinyAES crypto;
