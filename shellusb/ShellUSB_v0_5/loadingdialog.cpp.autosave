@@ -86,7 +86,7 @@ void LoadingDialog::chkSysDirectory()
     }
 }
 /**
- * @brief 설정파일의 유무를 확인하는 함수. 설정파일이 없으면 SettingDialog를 호출한다.
+ * @brief 설정파일의 유무를 확인하는 함수. 설정파일이 없으면 SettingDialog를 호출
  */
 void LoadingDialog::chkShellusbFile()
 {
@@ -94,7 +94,7 @@ void LoadingDialog::chkShellusbFile()
     file.setFileName(this->sysdir + this->shellusb);
     file.open(QFile::ReadOnly);
 
-    //설정파일의 유무확인.
+    // 설정파일의 유무 확인
     while (!file.exists())
     {
         SettingDialog settingDialog;
@@ -110,7 +110,7 @@ void LoadingDialog::chkShellusbFile()
     QString line;
     QTextStream in(&file);
 
-    //파일의 내용을 한줄씩 읽고 ':'를 기준으로 왼쪽을 key, 오른쪽을 value로 저장하는 알고리즘.
+    // 파일의 내용을 한줄씩 읽고 ':'를 기준으로 왼쪽을 key, 오른쪽을 value로 저장하는 알고리즘
     while (!in.atEnd())
     {
         key.clear();
@@ -138,7 +138,7 @@ void LoadingDialog::chkShellusbFile()
             value.append(*iter);
         }
 
-        //key의 값을 비교하여 해당되는 value를 SetUp 클래스의 정적변수에 저장.
+        // key의 값을 비교하여 해당되는 value를 SetUp 클래스의 정적변수에 저장
         if(key == "enc") SetUp::encUrl = value;
         else if(key == "dec") SetUp::decUrl = value;
         else if(key == "bit") SetUp::bit = value.toInt();
@@ -150,18 +150,18 @@ void LoadingDialog::chkShellusbFile()
     file.close();
 }
 /**
- * @brief 비밀번호 파일의 유무를 확인. 없다면 SettingDialog를 호출. 있다면 복호화하여 SetUp 클래스의 정적변수 pwd에 저장.
+ * @brief 비밀번호 파일의 유무를 확인. 없다면 SettingDialog를 호출. 있다면 복호화하여 SetUp 클래스의 정적변수 pwd에 저장
  */
 void LoadingDialog::chkShellpieceFile()
 {
     TinyAES crypto;
-    //QString 를 QByteArray로 변환.
+    // QString를 QByteArray로 변환
     QByteArray datakey = crypto.HexStringToByte("1234");
     QFile file;
     file.setFileName(this->sysdir + this->shellpiece);
     file.open(QFile::ReadOnly);
 
-    //파일의 존재를 확인한다.
+    // 파일의 존재를 확인
     while (!file.exists())
     {
         SettingDialog settingDialog;
@@ -179,7 +179,7 @@ void LoadingDialog::chkShellpieceFile()
 }
 
 /**
- * @brief 로그파일이 저장된 디렉토리를 확인하고 초기 설정한 용량을 넘는다면 알림을 주고 삭제 여부를 물어본다.
+ * @brief 로그파일이 저장된 디렉토리를 확인하고 초기 설정한 용량을 넘는다면 알림을 주고 삭제 여부를 확인
  * 
  */
 void LoadingDialog::chkLogPeriod()
@@ -188,11 +188,13 @@ void LoadingDialog::chkLogPeriod()
     qint64 size = 0;
     QDir dir(this->sysdir+"log");
 
-    if (dir.exists() && SetUp::period != 0) //알림 사용유무 확인.
+    // 알림 사용유무 확인
+    if (dir.exists() && SetUp::period != 0)
     {
         size = getsize(dir.path());
 
-        if (size >= SetUp::period * 1024 * 1024) // 용량계산
+        // 용량 계산
+        if (size >= SetUp::period * 1024 * 1024)
         {
             btn = QMessageBox::question(this, "Information","Log file is overflow "+
                                         QString::number(SetUp::period) + " MB.\n delete?",
@@ -208,7 +210,7 @@ void LoadingDialog::chkLogPeriod()
         dir.mkdir("../log");
 }
 
-//디렉토리의 내용을 지우는 재귀함수.
+// 디렉토리의 내용을 지우는 재귀 함수
 void LoadingDialog::removeDirectory(const QString& src)
 {
     QDir dir(src);
@@ -237,7 +239,7 @@ void LoadingDialog::removeDirectory(const QString& src)
     dir.rmdir(".");
 }
 
-//디렉토리안에 있는 내용들의 전체 사이즈를 구해오는 재귀함수.
+// 디렉토리 안에 있는 내용들의 전체 사이즈를 구해오는 재귀 함수
 qint64 LoadingDialog::getsize(const QString& src)
 {
     QDir dir(src);

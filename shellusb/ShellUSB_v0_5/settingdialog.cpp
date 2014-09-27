@@ -47,7 +47,7 @@ void SettingDialog::writeSysFile()
     file.open(QFile::ReadWrite|QFile::Text);
     QTextStream out(&file);
 
-    // 설정 파일에 저
+    // 설정 파일에 저장
     out << "#directory of enc & dec";
     out << endl;
     out << "enc:" << this->encUrl + "\n";
@@ -156,17 +156,17 @@ void SettingDialog::on_submit_btn_clicked()
         return;
     }
 
-    //directory path.
+    // 디렉토리 경로
     this->encUrl = ui->enc_url->text();
     this->decUrl = ui->dec_url->text();
 
-    //auto password.
+    // 오토 키 사용 여부 확인
     if (ui->pwd_chk->isChecked())
         this->pwdchk = "1";
     else
         this->pwdchk = "0";
 
-    //encrypt byte & log flag.
+    // AES bit 선택
     if (ui->aes_256->isChecked())
     {
         this->encrypt = "256";
@@ -176,11 +176,12 @@ void SettingDialog::on_submit_btn_clicked()
         this->encrypt = "128";
     }
 
+    // 로그 기록 사용 여부 확인
     if (ui->log_use->isChecked())
     {
         this->flag = "1";
 
-        if (ui->log_period->currentText().compare("No Notice")==0)
+        if (ui->log_period->currentText().compare("No Notice") == 0)
             this->period = "0";
         else
             this->period = ui->log_period->currentText();
