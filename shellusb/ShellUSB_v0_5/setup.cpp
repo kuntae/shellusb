@@ -7,8 +7,8 @@ QString SetUp::decUrl;
 //encrypt byte.
 int SetUp::bit;
 
-//lenguage.
-QString SetUp::lang;
+
+int SetUp::autopwd;
 
 //log
 int SetUp::logFlag;

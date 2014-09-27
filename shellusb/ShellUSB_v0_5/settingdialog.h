@@ -44,7 +44,7 @@ private:
     QString secondPwd;
     QString encUrl;
     QString decUrl;
-    QString lang;
+    QString pwdchk;
     QString encrypt;
     QString flag;
     QString period;

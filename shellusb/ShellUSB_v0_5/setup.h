@@ -11,7 +11,7 @@ public:
     static QString encUrl;
     static QString decUrl;
     static int bit;
-    static QString lang;
+    static int autopwd;
     static int logFlag;
     static int period;
     static QString pwd;

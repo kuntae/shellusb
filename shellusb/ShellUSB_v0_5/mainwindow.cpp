@@ -49,9 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("ShellUSB");
 
     QShortcut *srtInsert = new QShortcut(QKeySequence(Qt::Key_Return), this);
-    connect(srtInsert, SIGNAL(activated()), this, SLOT(on_pushButton_clicked()));
+    connect(srtInsert, SIGNAL(activated()), this, SLOT(on_login_btn_clicked()));
     QShortcut *srtEnter = new QShortcut(QKeySequence(Qt::Key_Enter), this);
-    connect(srtEnter, SIGNAL(activated()), this, SLOT(on_pushButton_clicked()));
+    connect(srtEnter, SIGNAL(activated()), this, SLOT(on_login_btn_clicked()));
 
 }
 
@@ -164,7 +164,7 @@ void MainWindow::on_login_btn_clicked()
             inText = getString(6);
             distortImg(makeImg(inText));
             ui->password->setText("");
-            ui->msg_label->setText("Password Fail or Security word Fail.");
+            ui->msg_label->setText("Security word Fail.");
 
             if (SetUp::logFlag)
             {
