@@ -6,12 +6,9 @@ ProgDialog::ProgDialog(QWidget *parent) :
     ui(new Ui::ProgDialog)
 {
     ui->setupUi(this);
-    qDebug() << "dialog created";
 }
 void ProgDialog::init(QString filePath, QByteArray key, bool cryptFlag)
 {
-    //qDebug() << "dialog: " << filePath << " " << key << " " << cryptFlag;
-
     int lastSlash = filePath.lastIndexOf("/");
     filename = filePath.mid(lastSlash + 1);
 
@@ -37,7 +34,6 @@ void ProgDialog::init(QString filePath, QByteArray key, bool cryptFlag)
 
 ProgDialog::~ProgDialog()
 {
-    qDebug() << "dialog die";
     delete ui;
 }
 
@@ -51,9 +47,10 @@ void ProgDialog::on_cancel_clicked()
     // QMutex를 사용해 쓰레드를 종료
     encryptThread->stop = true;
 
+    // 로그 기록
     if (SetUp::logFlag)
     {
-        LogThread *log = new LogThread("CANCELED//Encryption or Decryption file: [ " + this->filename + " ]",this);
+        LogThread *log = new LogThread("CANCELED//Encryption or Decryption file: [ " + this->filename + " ]", this);
         connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
         log->start();
     }

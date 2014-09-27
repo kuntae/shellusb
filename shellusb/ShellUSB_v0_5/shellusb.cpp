@@ -32,7 +32,7 @@ ShellUSB::ShellUSB(QWidget *parent) :
     this->setWindowTitle("ShellUSB");
 
     // 버튼 비활성화
-    ui->front_btn->setDisabled(true); //if listFront !=NULL then front_btn enable else then front_btn disabled.
+    ui->front_btn->setDisabled(true);
     ui->back_btn->setDisabled(true);
 
     // set icon images
@@ -95,21 +95,24 @@ void ShellUSB::on_enc_btn_clicked()
     if (!duplicated.compare(".ShellUSB"))
     {
         QMessageBox::warning(NULL, "Warning", "This file is already encrypted");
-        qDebug() << "duplicated";
 
         return;
     }
 
     QByteArray key;
-    if(!SetUp::autopwd){
-        // 같으면 파일 삭제하고 진행
+
+    // 오토 키 여부 검사
+    // 오토 키가 아니라면
+    if (!SetUp::autopwd)
+    {
+        // 키 입력
         key = crypto.HexStringToByte
                 (QInputDialog::getText(NULL, "Locking", "Input a locking key",
                                     QLineEdit::Password, NULL, &ok));
+
         // ok 버튼 눌렀는지 검사
         if (!ok)
         {
-            qDebug() << "canceled";
             if (SetUp::logFlag)
             {
                 LogThread *log = new LogThread("CANCELED//Insert password.",this);
@@ -120,15 +123,14 @@ void ShellUSB::on_enc_btn_clicked()
             return;
         }
 
-
-            // 확인 키 입력
+        // 확인 키 입력
         QByteArray confirmKey = crypto.HexStringToByte
                 (QInputDialog::getText(NULL, "Locking", "Input a same locking key again",
                                        QLineEdit::Password, NULL, &ok));
+
         // ok 버튼 눌렀는지 검사
         if (!ok)
         {
-            qDebug() << "canceled";
             if (SetUp::logFlag)
             {
                 LogThread *log = new LogThread("CANCELED//Insert password.",this);
@@ -143,28 +145,36 @@ void ShellUSB::on_enc_btn_clicked()
         // 틀리면 경고창
         if (strcmp(key, confirmKey))
         {
-            qDebug() << "password is not passed";
             QMessageBox::warning(NULL, "Warning", "Locking key is not same");
+
             return;
         }
 
-    }else{
+    }
+    // 오토 키가 맞다면
+    else
+    {
         key = crypto.HexStringToByte(SetUp::pwd);
     }
 
-    // 같으면 키 암호화하여 파일에 저장하고 진행
+    // 키 암호화하여 파일에 저장하고 진행
     TinyAES crypto;
+
+    // 키 암호화
     QByteArray encPwd = crypto.Encrypt(key, key);
+
     QFile file;
     QString fileName = fileModel->fileInfo(index).fileName();
     file.setFileName("./shell/sys/list/" + fileName);
 
+    // 파일 오픈 실패 시
     if (!file.open(QFile::WriteOnly))
-        qDebug() << __FILEW__  << " password file";
+        return;
 
     file.write(encPwd);
     file.close();
 
+    // 로그 기록
     if (SetUp::logFlag)
     {
         LogThread *log = new LogThread("WARNING//Encryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]", this);
@@ -193,34 +203,38 @@ void ShellUSB::on_dnc_btn_clicked()
     if (duplicated.compare(".ShellUSB"))
     {
         QMessageBox::warning(NULL, "Warning", "This file is not encrypted");
-        qDebug() << "duplicated";
 
         return;
     }
 
-    // 키 입력
     QByteArray key;
 
     TinyAES crypto;
     QByteArray encPwd;
     QFile file;
+
+    // 파일 이름 가져오기
     QString srcFile = fileModel->fileInfo(index).fileName();
     lastDot = srcFile.lastIndexOf(".");
     QString fileName = srcFile.mid(0, lastDot);
 
     file.setFileName("./shell/sys/list/" + fileName);
 
+    // 파일 오픈 실패 시
     if (!file.open(QFile::ReadOnly))
-        qDebug() <<  __FILEW__  << " password file";
+        return;
 
-    if(!SetUp::autopwd){
-    // input a key
+    // 오토 키 여부 검사
+    // 오토 키가 아니라면
+    if (!SetUp::autopwd)
+    {
+        // 키 입력
         key = crypto.HexStringToByte
                 (QInputDialog::getText(NULL, "Unlocking", "Input a unlocking key", QLineEdit::Password, NULL, &ok));
-// ok 버튼 눌렀는지 검사
+
+        // ok 버튼 눌렀는지 검사
         if (!ok)
         {
-            qDebug() << "canceled";
             if (SetUp::logFlag)
             {
                 LogThread *log = new LogThread("CANCELED//Insert password.",this);
@@ -230,32 +244,34 @@ void ShellUSB::on_dnc_btn_clicked()
 
             return;
         }
-    // 파일을 복호화하여 키 읽기
+
+        // 파일을 복호화하여 키 읽기
         QByteArray data = file.readAll();
 
         file.close();
 
+        // 암호화된 키 복호화
         QByteArray encKey = crypto.Decrypt(data, key);
 
         // 키 같은지 확인
         // 틀리면 경고창
         if (strcmp(key, encKey))
         {
-            qDebug() << "password is not passed";
             QMessageBox::warning(NULL, "Warning", "Locking key is not passed");
+
             return;
         }
     }
-        // 같으면 파일 삭제하고 진행
-        else
-        {
+    // 오토 키가 맞다면
+    else
+    {
         key = crypto.HexStringToByte(SetUp::pwd);
     }
 
-
+    // 파일 삭제 후 진행
     file.remove();
 
-
+    // 로그 기록
     if (SetUp::logFlag)
     {
         LogThread *log = new LogThread("WARNING//Decryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]", this);
@@ -351,6 +367,7 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
         QDesktopServices* ds = new QDesktopServices();
         ds->openUrl(QUrl(localeStr));
 
+        // 로그 기록
         if (SetUp::logFlag)
         {
             LogThread *log = new LogThread("SUCCESSED//execute file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]", this);
@@ -393,6 +410,8 @@ void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
 
         // lt 뒤에 새로운 위치 add
         QString newPath = dirModel->filePath(treeIndex);
+
+        // lt 뒤가 새로운 경로가 아니라면
         if (lt->back() != newPath)
         {
             lt->push_back(newPath);
@@ -417,28 +436,33 @@ void ShellUSB::on_tableView_customContextMenuRequested(const QPoint &pos)
     if (fileModel->fileInfo(idx).path().compare(".") == 0)
         return;
 
+    // 메뉴 (실행, 삭제)
     QMenu menu;
     menu.addAction("Run");
     menu.addAction("remove");
 
+    // 메뉴 선택
     QAction* selectedItem = menu.exec(globalPos);
 
     if (selectedItem)
     {
         QString select = selectedItem->text();
+
+        // 실행 선택 시
         if (select.compare("Run") == 0)
         {
-            qDebug() <<"Run";
+
         }
+        // 삭제 선택 시
         else if (select.compare("remove") == 0)
         {
-            qDebug() <<"remove"<<fileModel->fileInfo(idx).absoluteFilePath();
             QFile file(fileModel->fileInfo(idx).absoluteFilePath());
             file.remove();
         }
     }
 }
 
+// 만든이 보여주기
 void ShellUSB::on_help_btn_clicked()
 {
     helpDialog help;

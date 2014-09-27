@@ -51,7 +51,6 @@
 
 TinyAES::TinyAES()
 {
-
 }
 
 // encryption with IV

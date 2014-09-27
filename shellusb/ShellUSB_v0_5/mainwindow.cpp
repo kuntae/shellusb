@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     load.exec();
 
     ui->setupUi(this);
-    ui->password->setText("1234");
     inText = getString(6);
     failCnt = 0;
 
@@ -112,7 +111,7 @@ void MainWindow::distortImg(QPixmap pixmap)
     QPixmap pixmap2(pixmap.width(),pixmap.height());
     QPainter painter2(&pixmap2);
 
-    // Distort text
+    // 텍스트 비틀기
     for (int x = 0; x < pixmap.width(); x++)
     {
         for (int y = 0; y < pixmap.height(); y++)
@@ -166,9 +165,10 @@ void MainWindow::on_login_btn_clicked()
             ui->password->setText("");
             ui->msg_label->setText("Security word Fail.");
 
+            // 로그 기록
             if (SetUp::logFlag)
             {
-                LogThread *log = new LogThread("WARNING//Security String no match",this);
+                LogThread *log = new LogThread("WARNING//Security String no match", this);
                 connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
                 log->start();
             }
@@ -178,9 +178,10 @@ void MainWindow::on_login_btn_clicked()
 
         this->hide();
 
+        // 로그 기록
         if (SetUp::logFlag)
         {
-            LogThread *log = new LogThread("PASSED//Program start.",this);
+            LogThread *log = new LogThread("PASSED//Program start.", this);
             connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
             log->start();
         }
@@ -196,6 +197,7 @@ void MainWindow::on_login_btn_clicked()
         ui->password->setText("");
         failCnt++;
 
+        // 3번 이상 실패 시
         if (failCnt >= 3)
         {
             inText = getString(6);
@@ -208,9 +210,10 @@ void MainWindow::on_login_btn_clicked()
             this->setFixedSize(287, 237);
         }
 
+        // 로그 기록
         if (SetUp::logFlag)
         {
-            LogThread *log = new LogThread("WARNING//Password Fail.",this);
+            LogThread *log = new LogThread("WARNING//Password Fail.", this);
             connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
             log->start();
         }

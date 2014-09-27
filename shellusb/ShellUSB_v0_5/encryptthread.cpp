@@ -6,7 +6,6 @@
 EncryptThread::EncryptThread(QObject *parent):
     QThread(parent)
 {
-    qDebug() << "thread created";
     this->stop = false;
 }
 
@@ -20,7 +19,6 @@ void EncryptThread::init(QString filePath, QByteArray key, bool cryptFlag)
 
 EncryptThread::~EncryptThread()
 {
-    qDebug() << "Thread die";
 }
 
 // 함수 호출로 run 메소드 실행
@@ -66,13 +64,11 @@ void EncryptThread::encrypt()
     // 소스 파일과 타겟 파일 열기
     if (!srcFile.open(QFile::ReadOnly))
     {
-        qDebug() << "Could not open a read file";
         return;
     }
 
     if (!tgtFile.open(QFile::WriteOnly))
     {
-        qDebug() << "Could not open a write file";
         return;
     }
 
@@ -162,8 +158,6 @@ void EncryptThread::decrypt()
         tgtPath = srcPath.mid(0, lastDot);
     }
 
-    qDebug() << tgtPath;
-
     QFile tgtFile(tgtPath);
 
     // 키 설정
@@ -172,13 +166,11 @@ void EncryptThread::decrypt()
     // 소스 파일과 타겟 파일 열기
     if (!srcFile.open(QFile::ReadOnly))
     {
-        qDebug() << "Could not open a read file";
         return;
     }
 
     if (!tgtFile.open(QFile::WriteOnly))
     {
-        qDebug() << "Could not open a write file";
         return;
     }
 

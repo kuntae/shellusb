@@ -37,7 +37,6 @@ LoadingDialog::LoadingDialog(QWidget *parent) :
 
 LoadingDialog::~LoadingDialog()
 {
-    qDebug() << "close Loading Dialog";
     delete ui;
 }
 /**
@@ -47,7 +46,6 @@ void LoadingDialog::setLogFileName()
 {
         QDate date = QDate::currentDate();
         QString tmpdate = QString("%1_%2_%3.log").arg(QString::number(date.year()), QString::number(date.month()), QString::number(date.day()));
-        qDebug() << tmpdate<<endl;
         LogThread::logFileName = sysdir +"log/" + tmpdate;
 }
 /**
@@ -59,20 +57,17 @@ void LoadingDialog::chkSysDirectory()
 
     if (!dir.exists(this->sysdir))
     {
-        qDebug()<<"make sysdir.";
         dir.mkpath(this->sysdir+"log/");
         dir.mkpath(this->sysdir + "list/");
     }
 
     if (!dir.exists(this->sysdirenc) && !SetUp::encUrl.isEmpty())
     {
-        qDebug()<<"make sysdirenc.";
         dir.mkpath(SetUp::encUrl);
     }
 
     if (!dir.exists(this->sysdirdec) && !SetUp::decUrl.isEmpty())
     {
-        qDebug()<<"make sysdirdec.";
         dir.mkpath(SetUp::decUrl);
     }
 }
@@ -164,8 +159,6 @@ void LoadingDialog::chkShellpieceFile()
 
     QByteArray decData = crypto.Decrypt(data,datakey);
     SetUp::pwd = QString(decData);
-
-    qDebug()<<"(" << SetUp::pwd <<")";
 }
 
 /**
@@ -177,7 +170,6 @@ void LoadingDialog::chkLogPeriod()
     QMessageBox::StandardButton btn;
     qint64 size = 0;
     QDir dir(this->sysdir+"log");
-    qDebug() <<"#"+dir.path();
 
     if (dir.exists() && SetUp::period != 0)
     {

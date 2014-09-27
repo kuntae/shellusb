@@ -10,8 +10,6 @@ SettingDialog::SettingDialog(QWidget *parent) :
 
     ui->enc_url->setText("./shell/enc");
     ui->dec_url->setText("./shell/dec");
-    ui->password->setText("1234");
-    ui->password_2->setText("1234");
 
     // dark fusion 테마
     qApp->setStyle(QStyleFactory::create("Fusion"));
@@ -49,7 +47,7 @@ void SettingDialog::writeSysFile()
     file.open(QFile::ReadWrite|QFile::Text);
     QTextStream out(&file);
 
-    //write file.
+    // 설정 파일에 저
     out << "#directory of enc & dec";
     out << endl;
     out << "enc:" << this->encUrl + "\n";
@@ -75,15 +73,16 @@ void SettingDialog::writeSysFile()
  */
 void SettingDialog::writePwdFile()
 {
-    //write password file.
+    // 암호 파일 저장
     TinyAES crypto;
     QByteArray key = crypto.HexStringToByte("1234");
     QByteArray encPwd = crypto.Encrypt(this->firstPwd.toLocal8Bit(), key);
     QFile file;
     file.setFileName("./shell/sys/shellpiece.bin");
 
+    // 파일 오픈 실패 시
     if (!file.open(QFile::WriteOnly))
-        qDebug()<<__FILEW__ <<" password file";
+        return;
 
     file.write(encPwd);
     file.close();
@@ -146,13 +145,12 @@ void SettingDialog::on_decpath_btn_clicked()
  */
 void SettingDialog::on_submit_btn_clicked()
 {
-    //password check.
+    // 비밀번호 확인
     this->firstPwd = ui->password->text();
     this->secondPwd = ui->password_2->text();
 
     if (this->firstPwd != this->secondPwd || (this->firstPwd.isEmpty() || this->secondPwd.isEmpty()))
     {
-        qDebug() << "no match";
         QMessageBox::warning(this, "Warning","NO MATCH PASSWORD.");
         emit(noMatchPwd());
         return;
@@ -163,7 +161,7 @@ void SettingDialog::on_submit_btn_clicked()
     this->decUrl = ui->dec_url->text();
 
     //auto password.
-    if(ui->pwd_chk->isChecked())
+    if (ui->pwd_chk->isChecked())
         this->pwdchk = "1";
     else
         this->pwdchk = "0";
