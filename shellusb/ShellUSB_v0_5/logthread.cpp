@@ -8,11 +8,13 @@ LogThread::LogThread( QString str, QObject *parent):QThread(parent), msg(str)
     qDebug() << "log thread created.";
 }
 
-LogThread::~LogThread(){
+LogThread::~LogThread()
+{
   qDebug()<<"die log thread.";
 }
 
-void LogThread::run(){
+void LogThread::run()
+{
   qDebug()<<"runnig log thread.";
   qDebug()<<logFileName;
   QString timeStr;
@@ -29,7 +31,8 @@ void LogThread::run(){
   file.close();
 }
 
-void LogThread::setLogFileName(QString str){
+void LogThread::setLogFileName(QString str)
+{
   logFileName = str;
 }
 

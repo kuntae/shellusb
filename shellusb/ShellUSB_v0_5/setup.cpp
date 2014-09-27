@@ -19,9 +19,8 @@ QString SetUp::pwd;
 
 SetUp::SetUp()
 {
-
 }
 
-SetUp::~SetUp(){
-
+SetUp::~SetUp()
+{
 }

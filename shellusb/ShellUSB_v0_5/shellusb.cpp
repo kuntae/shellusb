@@ -102,23 +102,69 @@ void ShellUSB::on_enc_btn_clicked()
 
     // input a key
     QByteArray key = crypto.HexStringToByte
-            (QInputDialog::getText(NULL, "key", "Enter a key", QLineEdit::Password, NULL, &ok));
+            (QInputDialog::getText(NULL, "Locking", "Input a locking key",
+                                   QLineEdit::Password, NULL, &ok));
 
     if (!ok)
     {
         qDebug() << "canceled";
-        if(SetUp::logFlag){
+        if (SetUp::logFlag)
+        {
             LogThread *log = new LogThread("CANCELED//Insert password.",this);
             connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
             log->start();
         }
+
         return;
     }
-    if(SetUp::logFlag){
-        LogThread *log = new LogThread("WARNING//Encryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]",this);
+
+    QByteArray confirmKey = crypto.HexStringToByte
+            (QInputDialog::getText(NULL, "Locking", "Input a same locking key again",
+                                   QLineEdit::Password, NULL, &ok));
+
+    if (!ok)
+    {
+        qDebug() << "canceled";
+        if (SetUp::logFlag)
+        {
+            LogThread *log = new LogThread("CANCELED//Insert password.",this);
+            connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
+            log->start();
+        }
+
+        return;
+    }
+
+    // compare keys
+    if (strcmp(key, confirmKey))
+    {
+        qDebug() << "password is not passed";
+        QMessageBox::warning(NULL, "Warning", "Locking key is not same");
+        return;
+    }
+    // generate a list file
+    else
+    {
+        TinyAES crypto;
+        QByteArray encPwd = crypto.Encrypt(key, key);
+        QFile file;
+        QString fileName = fileModel->fileInfo(index).fileName();
+        file.setFileName("./shell/sys/list/" + fileName);
+
+        if (!file.open(QFile::WriteOnly))
+            qDebug() << __FILEW__  << " password file";
+
+        file.write(encPwd);
+        file.close();
+    }
+
+    if (SetUp::logFlag)
+    {
+        LogThread *log = new LogThread("WARNING//Encryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]", this);
         connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
         log->start();
     }
+
     // ProgDialog 생성
     ProgDialog *progDialog = new ProgDialog(this);
     progDialog->init(fileModel->fileInfo(index).absoluteFilePath(), key, true);
@@ -147,21 +193,55 @@ void ShellUSB::on_dnc_btn_clicked()
 
     // input a key
     QByteArray key = crypto.HexStringToByte
-            (QInputDialog::getText(NULL, "key", "Enter a key", QLineEdit::Password, NULL, &ok));
+            (QInputDialog::getText(NULL, "Unlocking", "Input a unlocking key", QLineEdit::Password, NULL, &ok));
 
     if (!ok)
     {
         qDebug() << "canceled";
-        if(SetUp::logFlag){
+        if (SetUp::logFlag)
+        {
             LogThread *log = new LogThread("CANCELED//Insert password.",this);
             connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
             log->start();
         }
+
         return;
     }
 
-    if(SetUp::logFlag){
-        LogThread *log = new LogThread("WARNING//Decryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]",this);
+    // read a key
+    TinyAES crypto;
+    QByteArray encPwd;
+    QFile file;
+    QString srcFile = fileModel->fileInfo(index).fileName();
+    lastDot = srcFile.lastIndexOf(".");
+    QString fileName = srcFile.mid(0, lastDot);
+
+    file.setFileName("./shell/sys/list/" + fileName);
+
+    if (!file.open(QFile::ReadOnly))
+        qDebug() <<  __FILEW__  << " password file";
+
+    QByteArray data = file.readAll();
+
+    file.close();
+
+    QByteArray encKey = crypto.Decrypt(data, key);
+
+    // compare keys
+    if (strcmp(key, encKey))
+    {
+        qDebug() << "password is not passed";
+        QMessageBox::warning(NULL, "Warning", "Locking key is not passed");
+        return;
+    }
+    else
+    {
+        file.remove();
+    }
+
+    if (SetUp::logFlag)
+    {
+        LogThread *log = new LogThread("WARNING//Decryption file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]", this);
         connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
         log->start();
     }
@@ -227,13 +307,16 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
                 tmp++;
             it++;
         }
+
         for (int i = 0; i < tmp; i++)
             lt->pop_back();
 
         // lt 뒤에 새로운 위치 add
         QString path = fileModel->fileInfo(index).absoluteFilePath();
-        if(lt->back() != path)
+
+        if (lt->back() != path)
             lt->push_back(path);
+
         // 더블클릭한 위치로 이동
         ui->tableView->setRootIndex(fileModel->setRootPath(path));
         ui->treeView->setCurrentIndex(dirModel->setRootPath(path));
@@ -249,8 +332,10 @@ void ShellUSB::on_tableView_doubleClicked(const QModelIndex &index)
         QString localeStr = codec->toUnicode(fileModel->fileInfo(index).absoluteFilePath().toLatin1());
         QDesktopServices* ds = new QDesktopServices();
         ds->openUrl(QUrl(localeStr));
-        if(SetUp::logFlag){
-            LogThread *log = new LogThread("SUCCESSED//execute file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]",this);
+
+        if (SetUp::logFlag)
+        {
+            LogThread *log = new LogThread("SUCCESSED//execute file: [ " + fileModel->fileInfo(index).absoluteFilePath()+ " ]", this);
             connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
             log->start();
         }
@@ -290,7 +375,8 @@ void ShellUSB::on_treeView_clicked(const QModelIndex &treeIndex)
 
         // lt 뒤에 새로운 위치 add
         QString newPath = dirModel->filePath(treeIndex);
-        if(lt->back() != newPath){
+        if (lt->back() != newPath)
+        {
             lt->push_back(newPath);
             iter = lt->rbegin();
         }
@@ -310,18 +396,24 @@ void ShellUSB::on_tableView_customContextMenuRequested(const QPoint &pos)
     QModelIndex idx = ui->tableView->indexAt(pos);
     QPoint globalPos = ui->tableView->viewport()->mapToGlobal(pos);
 
-    if(fileModel->fileInfo(idx).path().compare(".") == 0) return;
+    if (fileModel->fileInfo(idx).path().compare(".") == 0)
+        return;
+
     QMenu menu;
     menu.addAction("Run");
     menu.addAction("remove");
 
     QAction* selectedItem = menu.exec(globalPos);
 
-    if(selectedItem){
+    if (selectedItem)
+    {
         QString select = selectedItem->text();
-        if(select.compare("Run") == 0){
+        if (select.compare("Run") == 0)
+        {
             qDebug() <<"Run";
-        }else if(select.compare("remove") == 0){
+        }
+        else if (select.compare("remove") == 0)
+        {
             qDebug() <<"remove"<<fileModel->fileInfo(idx).absoluteFilePath();
             QFile file(fileModel->fileInfo(idx).absoluteFilePath());
             file.remove();

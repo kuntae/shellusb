@@ -44,7 +44,8 @@ SettingDialog::~SettingDialog()
 /**
  * @brief shellusb.bin에 필요한 설정 내용을 저장
  */
-void SettingDialog::writeSysFile(){
+void SettingDialog::writeSysFile()
+{
     QFile file;
     file.setFileName("./shell/sys/shellusb.bin");
     file.open(QFile::ReadWrite|QFile::Text);
@@ -61,24 +62,31 @@ void SettingDialog::writeSysFile(){
     out << "lang:" << this->lang + "\n";
     out << "#writing log file\n";
     out << "flag:" << this->flag + "\n";
-    if(this->flag == "1"){
+
+    if (this->flag == "1")
+    {
         out << "#delete of log file\n";
         out << "period:" << this->period + "\n";
     }
+
     file.close();
 }
 
 /**
  * @brief shellpiece.bin에 패스워드를 암호화하여 저장
  */
-void SettingDialog::writePwdFile(){
+void SettingDialog::writePwdFile()
+{
     //write password file.
     TinyAES crypto;
     QByteArray key = crypto.HexStringToByte("1234");
     QByteArray encPwd = crypto.Encrypt(this->firstPwd.toLocal8Bit(), key);
     QFile file;
     file.setFileName("./shell/sys/shellpiece.bin");
-    if(!file.open(QFile::WriteOnly)) qDebug()<<__FILEW__ <<" password file";
+
+    if (!file.open(QFile::WriteOnly))
+        qDebug()<<__FILEW__ <<" password file";
+
     file.write(encPwd);
     file.close();
 }
@@ -100,16 +108,20 @@ void SettingDialog::on_encpath_btn_clicked()
 {
     QFileDialog dialog(this);
     QString path = ui->enc_url->text();
-    if(path.size() == 0) {
+
+    if (path.size() == 0)
+    {
         path = "C:/";
     }
 
     QString dirPath = dialog.getExistingDirectory(this, "암호화한 파일을 저장할 경로를 지정해주세요.", path);
-    if(dirPath.size() > 0) {
+
+    if (dirPath.size() > 0)
+    {
         ui->enc_url->setText(dirPath);
     }
-
 }
+
 /**
  * @brief dec_url 경로를 수정하는 이벤트 처리 함수
  */
@@ -117,12 +129,16 @@ void SettingDialog::on_decpath_btn_clicked()
 {
     QFileDialog dialog(this);
     QString path = ui->dec_url->text();
-    if(path.size() == 0) {
+
+    if (path.size() == 0)
+    {
         path = "C:/";
     }
 
     QString dirPath = dialog.getExistingDirectory(this, "암호화를 푼 파일을 저장할 경로를 지정해주세요.", path);
-    if(dirPath.size() > 0) {
+
+    if (dirPath.size() > 0)
+    {
         ui->dec_url->setText(dirPath);
     }
 }
@@ -136,12 +152,14 @@ void SettingDialog::on_submit_btn_clicked()
     this->firstPwd = ui->password->text();
     this->secondPwd = ui->password_2->text();
 
-    if(this->firstPwd != this->secondPwd || (this->firstPwd.isEmpty() || this->secondPwd.isEmpty())){
+    if (this->firstPwd != this->secondPwd || (this->firstPwd.isEmpty() || this->secondPwd.isEmpty()))
+    {
         qDebug() << "no match";
         QMessageBox::warning(this, "Warning","NO MATCH PASSWORD.");
         emit(noMatchPwd());
         return;
     }
+
     //directory path.
     this->encUrl = ui->enc_url->text();
     this->decUrl = ui->dec_url->text();
@@ -150,19 +168,26 @@ void SettingDialog::on_submit_btn_clicked()
     this->lang = ui->language->currentText();
 
     //encrypt byte & log flag.
-    if(ui->aes_256->isChecked()){
+    if (ui->aes_256->isChecked())
+    {
         this->encrypt = "256";
-    }else{
+    }
+    else
+    {
         this->encrypt = "128";
     }
 
-    if(ui->log_use->isChecked()){
+    if (ui->log_use->isChecked())
+    {
         this->flag = "1";
-        if(ui->log_period->currentText().compare("No Notice")==0)
+
+        if (ui->log_period->currentText().compare("No Notice")==0)
             this->period = "0";
         else
             this->period = ui->log_period->currentText();
-    }else{
+    }
+    else
+    {
         this->flag = "0";
     }
 

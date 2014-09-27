@@ -1,4 +1,3 @@
-
 /*
  ---------------------------------------------------------------------------
  Copyright (c) 2013, Igor Saric. All rights reserved.
@@ -63,7 +62,7 @@ QByteArray TinyAES::Encrypt(QByteArray p_input, QByteArray p_key)
 
     if (p_key.size() != 32)
     {
-        while(p_key.size() != 32)
+        while (p_key.size() != 32)
         {
             p_key = p_key + "0";
         }
@@ -79,7 +78,7 @@ QByteArray TinyAES::Decrypt(QByteArray p_input, QByteArray p_key)
 
     if (p_key.size() != 32)
     {
-        while(p_key.size() != 32)
+        while (p_key.size() != 32)
         {
             p_key = p_key + "0";
         }

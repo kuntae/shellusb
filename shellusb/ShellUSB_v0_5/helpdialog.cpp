@@ -5,7 +5,6 @@ helpDialog::helpDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::helpDialog)
 {
-
     ui->setupUi(this);
     ui->label->setPixmap(QPixmap(":/img/ablesoft.png"));
     this->setWindowTitle("ShellUSB");

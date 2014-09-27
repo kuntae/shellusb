@@ -10,7 +10,6 @@ int MainWindow::failCnt;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
-
     this->hide();
     LoadingDialog load;
     load.setModal(true);
@@ -66,18 +65,21 @@ MainWindow::~MainWindow()
  * @param length
  * @return
  */
-QString MainWindow::getString(int length){
+QString MainWindow::getString(int length)
+{
     QString alphanum =
             ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
     QString result;
     QTime time = QTime::currentTime();
     qsrand((uint)time.msec());
-    for(int i=0; i<length; ++i)
+
+    for (int i = 0; i < length; ++i)
     {
         int index = qrand() % alphanum.length();
         QChar nextChar = alphanum.at(index);
         result.append(nextChar);
     }
+
     return result;
 }
 
@@ -86,7 +88,8 @@ QString MainWindow::getString(int length){
  * @param inText
  * @return
  */
-QPixmap MainWindow::makeImg(QString inText){
+QPixmap MainWindow::makeImg(QString inText)
+{
     QPixmap pixmap(300,150);
     pixmap.fill(Qt::white);
 
@@ -110,8 +113,10 @@ void MainWindow::distortImg(QPixmap pixmap)
     QPainter painter2(&pixmap2);
 
     // Distort text
-    for(int x = 0; x < pixmap.width(); x++){
-        for(int y = 0; y < pixmap.height(); y++){
+    for (int x = 0; x < pixmap.width(); x++)
+    {
+        for (int y = 0; y < pixmap.height(); y++)
+        {
             qsrand(x);
             float rand1 = qrand()%5;
             qsrand(y);
@@ -120,18 +125,24 @@ void MainWindow::distortImg(QPixmap pixmap)
             float siny = qSin((float)y/10)*5;
             int newx = x+rand1+sinx;
             int newy = y+rand2+siny;
-            if(newx < pixmap.width() && newy < pixmap.height()){
-                if(rand1+rand2 > 1) {
+
+            if (newx < pixmap.width() && newy < pixmap.height())
+            {
+                if (rand1+rand2 > 1)
+                {
                     painter2.setPen(pixmapImg.pixel(newx,newy));
-                } else {
+                }
+                else
+                {
                     painter2.setPen(Qt::black);
                     painter2.drawRect(x,y,10,10);
                 }
-                painter2.drawRect(x,y,1,1);
 
+                painter2.drawRect(x,y,1,1);
             }
         }
     }
+
     ui->cacha_label->setPixmap(pixmap2);
 }
 
@@ -148,35 +159,45 @@ void MainWindow::on_login_btn_clicked()
     if (!passWord.compare(SetUp::pwd))
     {
         // Catcha가 틀린 경우
-        if(failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0) {
+        if (failCnt >= 3 && QString::compare(inText, ui->lineEdit->text()) != 0)
+        {
             inText = getString(6);
             distortImg(makeImg(inText));
             ui->password->setText("");
             ui->msg_label->setText("Password Fail or Security word Fail.");
-            if(SetUp::logFlag){
+
+            if (SetUp::logFlag)
+            {
                 LogThread *log = new LogThread("WARNING//Security String no match",this);
                 connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
                 log->start();
             }
+
             return;
         }
+
         this->hide();
-        if(SetUp::logFlag){
+
+        if (SetUp::logFlag)
+        {
             LogThread *log = new LogThread("PASSED//Program start.",this);
             connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
             log->start();
         }
+
         ShellUSB shell;
         shell.setModal(true);
         shell.exec();
     }
     // 패스워드가 틀린 경우
-    else {
+    else
+    {
         ui->msg_label->setText("Password Fail ");
         ui->password->setText("");
         failCnt++;
 
-        if(failCnt >= 3) {
+        if (failCnt >= 3)
+        {
             inText = getString(6);
             distortImg(makeImg(inText));
             ui->cacha_label->setVisible(true);
@@ -186,13 +207,14 @@ void MainWindow::on_login_btn_clicked()
             ui->login_btn->setGeometry(110, 180, 81, 23);
             this->setFixedSize(287, 237);
         }
-        if(SetUp::logFlag){
+
+        if (SetUp::logFlag)
+        {
             LogThread *log = new LogThread("WARNING//Password Fail.",this);
             connect(log, SIGNAL(finished()), log, SLOT(deleteLater()));
             log->start();
         }
     }
-
 }
 
 /**
